@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "npx tsc",
-    "lint": "npx rome check src/",
+    "lint": "npx rome check src/ --apply-unsafe",
     "format": "npx rome format src/ --write",
     "test": "npx rome ci src/"
   },

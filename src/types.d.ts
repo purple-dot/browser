@@ -1,7 +1,10 @@
 export declare global {
   interface Window {
-    PurpleDotConfig: {
+    PurpleDotConfig?: {
       apiKey: string;
+    };
+    Shopify?: {
+      shop: string;
     };
   }
 }

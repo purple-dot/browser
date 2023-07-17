@@ -1,13 +1,13 @@
-import { injectComponentScripts } from './web-components';
+import { injectComponentScripts } from "./web-components";
 
 export interface PurpleDotConfig {
-    apiKey: string;
+  apiKey: string;
 }
 
 export function init(config: PurpleDotConfig) {
-    window.PurpleDotConfig = {
-        apiKey: config.apiKey,
-    };
+  window.PurpleDotConfig = {
+    apiKey: config.apiKey,
+  };
 
-    injectComponentScripts();
+  injectComponentScripts();
 }

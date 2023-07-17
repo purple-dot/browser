@@ -1,7 +1,7 @@
 export declare global {
-    interface Window {
-        PurpleDotConfig: {
-            apiKey: string;
-        };
-    }
+  interface Window {
+    PurpleDotConfig: {
+      apiKey: string;
+    };
+  }
 }

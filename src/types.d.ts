@@ -3,8 +3,12 @@ export declare global {
     PurpleDotConfig?: {
       apiKey: string;
     };
+
     Shopify?: {
-      shop: string;
+      shop?: string;
+      routes?: {
+        root?: string;
+      };
     };
   }
 }

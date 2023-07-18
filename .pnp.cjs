@@ -29,10 +29,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",\
           "packageDependencies": [\
             ["@tsconfig/recommended", "npm:1.0.2"],\
+            ["@types/js-cookie", "npm:3.0.3"],\
+            ["@types/uuid", "npm:9.0.2"],\
             ["@vitest/coverage-v8", "virtual:4a6d5363dfb586fda85c516805c58471af4bdd5510dc3be4c7ad1d357ffecada65db7334b2c1a92e3490d51f497b3f47211fd3b52312b344bfb5d011d81f8473#npm:0.33.0"],\
+            ["js-cookie", "npm:3.0.5"],\
             ["jsdom", "virtual:4a6d5363dfb586fda85c516805c58471af4bdd5510dc3be4c7ad1d357ffecada65db7334b2c1a92e3490d51f497b3f47211fd3b52312b344bfb5d011d81f8473#npm:22.1.0"],\
             ["rome", "npm:12.1.3-nightly.f65b0d9"],\
             ["typescript", "patch:typescript@npm%3A5.1.6#~builtin<compat/typescript>::version=5.1.6&hash=5da071"],\
+            ["uuid", "npm:9.0.0"],\
             ["vitest", "virtual:4a6d5363dfb586fda85c516805c58471af4bdd5510dc3be4c7ad1d357ffecada65db7334b2c1a92e3490d51f497b3f47211fd3b52312b344bfb5d011d81f8473#npm:0.33.0"],\
             ["whatwg-fetch", "npm:3.6.2"]\
           ],\
@@ -382,10 +386,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@purple-dot/browser", "workspace:."],\
             ["@tsconfig/recommended", "npm:1.0.2"],\
+            ["@types/js-cookie", "npm:3.0.3"],\
+            ["@types/uuid", "npm:9.0.2"],\
             ["@vitest/coverage-v8", "virtual:4a6d5363dfb586fda85c516805c58471af4bdd5510dc3be4c7ad1d357ffecada65db7334b2c1a92e3490d51f497b3f47211fd3b52312b344bfb5d011d81f8473#npm:0.33.0"],\
+            ["js-cookie", "npm:3.0.5"],\
             ["jsdom", "virtual:4a6d5363dfb586fda85c516805c58471af4bdd5510dc3be4c7ad1d357ffecada65db7334b2c1a92e3490d51f497b3f47211fd3b52312b344bfb5d011d81f8473#npm:22.1.0"],\
             ["rome", "npm:12.1.3-nightly.f65b0d9"],\
             ["typescript", "patch:typescript@npm%3A5.1.6#~builtin<compat/typescript>::version=5.1.6&hash=5da071"],\
+            ["uuid", "npm:9.0.0"],\
             ["vitest", "virtual:4a6d5363dfb586fda85c516805c58471af4bdd5510dc3be4c7ad1d357ffecada65db7334b2c1a92e3490d51f497b3f47211fd3b52312b344bfb5d011d81f8473#npm:0.33.0"],\
             ["whatwg-fetch", "npm:3.6.2"]\
           ],\
@@ -501,11 +509,29 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["@types/js-cookie", [\
+        ["npm:3.0.3", {\
+          "packageLocation": "./.yarn/cache/@types-js-cookie-npm-3.0.3-ffeb1814e1-927254ec37.zip/node_modules/@types/js-cookie/",\
+          "packageDependencies": [\
+            ["@types/js-cookie", "npm:3.0.3"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["@types/node", [\
         ["npm:20.4.2", {\
           "packageLocation": "./.yarn/cache/@types-node-npm-20.4.2-0b33863e43-99e544ea75.zip/node_modules/@types/node/",\
           "packageDependencies": [\
             ["@types/node", "npm:20.4.2"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@types/uuid", [\
+        ["npm:9.0.2", {\
+          "packageLocation": "./.yarn/cache/@types-uuid-npm-9.0.2-f2a5f65979-1754bcf344.zip/node_modules/@types/uuid/",\
+          "packageDependencies": [\
+            ["@types/uuid", "npm:9.0.2"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -1483,6 +1509,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["jackspeak", "npm:2.2.1"],\
             ["@isaacs/cliui", "npm:8.0.2"],\
             ["@pkgjs/parseargs", "npm:0.11.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["js-cookie", [\
+        ["npm:3.0.5", {\
+          "packageLocation": "./.yarn/cache/js-cookie-npm-3.0.5-8fc8fcc9b4-2dbd2809c6.zip/node_modules/js-cookie/",\
+          "packageDependencies": [\
+            ["js-cookie", "npm:3.0.5"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -2518,6 +2553,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/util-deprecate-npm-1.0.2-e3fe1a219c-474acf1146.zip/node_modules/util-deprecate/",\
           "packageDependencies": [\
             ["util-deprecate", "npm:1.0.2"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["uuid", [\
+        ["npm:9.0.0", {\
+          "packageLocation": "./.yarn/cache/uuid-npm-9.0.0-46c41e3e43-8dd2c83c43.zip/node_modules/uuid/",\
+          "packageDependencies": [\
+            ["uuid", "npm:9.0.0"]\
           ],\
           "linkType": "HARD"\
         }]\

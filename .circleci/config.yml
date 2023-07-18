@@ -21,6 +21,21 @@ jobs:
       - run: yarn lint
       - run: yarn build
       - run: yarn test
+      - persist_to_workspace:
+          root: ~/repo
+          paths: .
+
+  publish:
+    executor: node
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run:
+          name: Authenticate with registry
+          command: "echo \"npmAuthToken: $NPM_TOKEN\" >> ~/repo/.yarnrc.yml"
+      - run:
+          name: Publish package
+          command: yarn npm publish --access public --tolerate-republish
 
 workflows:
   version: 2
@@ -28,3 +43,9 @@ workflows:
   build:
     jobs:
       - build
+      - publish:
+          requires:
+            - build
+          filters:
+            branches:
+              only: main

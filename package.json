@@ -19,6 +19,7 @@
     "url": "https://github.com/purple-dot/browser/issues"
   },
   "homepage": "https://github.com/purple-dot/browser#readme",
+  "main": "dist/index.js",
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.2",
     "@vitest/coverage-v8": "^0.33.0",

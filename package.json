@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "lint": "rome ci src/",
-    "format": "rome format --apply-unsafe src/",
+    "format": "rome format --write src/",
     "test": "vitest",
     "coverage": "vitest run --coverage"
   },

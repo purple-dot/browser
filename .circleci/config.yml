@@ -35,7 +35,7 @@ jobs:
           command: "echo \"npmAuthToken: $NPM_TOKEN\" >> ~/repo/.yarnrc.yml"
       - run:
           name: Publish package
-          command: yarn npm publish --access public
+          command: yarn npm publish --access public --tolerate-republish
 
 workflows:
   version: 2
@@ -46,8 +46,8 @@ workflows:
       - publish:
           requires:
             - build
-          filters:
-            tags:
-              only: /^v.*/
-            branches:
-              ignore: /.*/
+          # filters:
+          #   tags:
+          #     only: /^v.*/
+          #   branches:
+          #     ignore: /.*/

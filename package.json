@@ -1,27 +1,31 @@
 {
+  "author": "support@purpledotprice.com",
   "name": "@purple-dot/browser",
+  "description": "Purple Dot Browser SDK",
+  "license": "Apache-2.0",
   "version": "0.0.1",
-  "description": "",
-  "main": "dist/index.js",
+  "engines": {
+    "node": "18.16.x",
+    "yarn": "3.6.x"
+  },
   "scripts": {
-    "build": "npx tsc",
-    "lint": "npx rome check src/ --apply-unsafe",
-    "format": "npx rome format src/ --write",
-    "test": "npx rome ci src/"
+    "build": "tsc",
+    "lint": "rome check src/ --apply-unsafe",
+    "format": "rome format src/ --write",
+    "test": "rome ci src/"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/purple-dot/browser.git"
   },
-  "author": "",
-  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/purple-dot/browser/issues"
   },
   "homepage": "https://github.com/purple-dot/browser#readme",
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.2",
-    "rome": "^12.1.3",
+    "rome": "12.1.3-nightly.f65b0d9",
     "typescript": "^5.1.6"
-  }
+  },
+  "packageManager": "yarn@3.6.1"
 }

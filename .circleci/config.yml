@@ -2,12 +2,10 @@ version: 2.1
 orbs:
   docker: circleci/docker@2.1.1
 executors:
-  # Node environment with Chrome installed for Cypress
   node:
     docker: &node_image
-      - image: cypress/browsers:node16.17.0-chrome106
+      - image: cimg/node:18.16.1
         environment:
-          ## this enables colors in the output
           TERM: xterm
           CYPRESS_CACHE_FOLDER: ~/repo/.cypress
     working_directory: ~/repo
@@ -19,9 +17,9 @@ jobs:
     resource_class: medium
     steps:
       - checkout
-      - run: npm ci
-      - run: npm run build
-      - run: npm run test
+      - run: yarn install
+      - run: yarn build
+      - run: yarn test
 
 workflows:
   version: 2

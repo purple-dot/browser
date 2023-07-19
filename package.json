@@ -11,7 +11,7 @@
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "cy:open": "cd cypress/support && npx http-server . -p 8080& cd ../.. && cypress open",
-    "cy:run": "YARN_PNP_MODE=loose; cd cypress/support && yarn webpack --config webpack.config.js && yarn dlx http-server . -p 8080 & cd ../.. && cypress run"
+    "cy:run": "cd cypress/support && yarn webpack --config webpack.config.js && yarn dlx http-server . -p 8080 & cd ../.. && YARN_PNP_MODE=loose cypress run"
   },
   "repository": {
     "type": "git",

@@ -2,8 +2,10 @@ dist
 node_modules
 coverage
 
+cypress/videos/*
+
 .yarn/*
-!.yarn/cache
+.yarn/cache
 !.yarn/patches
 !.yarn/plugins
 !.yarn/releases

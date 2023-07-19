@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "lint": "rome ci src/",
-    "format": "rome format --write src/",
+    "format": "rome check --apply-unsafe src/ && rome format --write src/",
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "cy:open": "cd cypress/support && npx http-server . -p 8080& cd ../.. && cypress open",
@@ -24,6 +24,8 @@
   "main": "dist/index.js",
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.2",
+    "@types/js-cookie": "^3.0.3",
+    "@types/uuid": "^9.0.2",
     "@vitest/coverage-v8": "^0.33.0",
     "cypress": "^12.17.1",
     "jsdom": "22.1.0",
@@ -36,5 +38,9 @@
     "node": "18.16.x",
     "yarn": "3.6.x"
   },
-  "packageManager": "yarn@3.6.1"
+  "packageManager": "yarn@3.6.1",
+  "dependencies": {
+    "js-cookie": "^3.0.5",
+    "uuid": "^9.0.0"
+  }
 }

@@ -1,5 +1,5 @@
 export type FetchParams = [input: string | URL, init?: RequestInit];
-type JSONObject = { [key: string]: unknown };
+export type JSONObject = { [key: string]: unknown };
 
 type InterceptHandler<A> = (
   request: A,
@@ -201,7 +201,7 @@ export class RequestInterceptor extends Interceptor<Callback> {
   }
 }
 
-export function parseRequestBody(
+export function parseFetchRequestBody(
   init: RequestInit,
 ): FormData | URLSearchParams | JSONObject {
   if (typeof init.body === "string") {
@@ -233,9 +233,9 @@ export function parseRequestBody(
   throw new TypeError("request body could not be parsed");
 }
 
-export function makeRequestBody(
+export function makeFetchRequestBody(
   init: RequestInit,
-  body: ReturnType<typeof parseRequestBody>,
+  body: ReturnType<typeof parseFetchRequestBody>,
 ): URLSearchParams | FormData | string {
   if (typeof init.body === "string" && typeof body !== "string") {
     if (body instanceof URLSearchParams || body instanceof FormData) {

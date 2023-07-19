@@ -16,12 +16,11 @@ export async function fetchProductsPreorderState(handle: string) {
   return undefined;
 }
 
-export enum NewEndpointPreorderState {
-  NoOpenWaitlists = "NO_OPEN_WAITLISTS",
-  AvailableInStock = "AVAILABLE_IN_STOCK",
-  OnPreorder = "ON_PREORDER",
-  SoldOut = "SOLD_OUT",
-}
+export type NewEndpointPreorderState =
+  | "NO_OPEN_WAITLISTS"
+  | "AVAILABLE_IN_STOCK"
+  | "ON_PREORDER"
+  | "SOLD_OUT";
 
 export interface VariantPreorderState {
   state: NewEndpointPreorderState;

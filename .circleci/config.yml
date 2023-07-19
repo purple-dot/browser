@@ -21,6 +21,7 @@ jobs:
       - run: yarn lint
       - run: yarn build
       - run: yarn test
+      - run: yarn cy:run
       - persist_to_workspace:
           root: ~/repo
           paths: .

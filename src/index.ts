@@ -1,5 +1,4 @@
 import { injectComponentScripts } from "./web-components";
-import * as api from "./api";
 import { trackPageView } from "./tracking";
 
 export interface PurpleDotConfig {
@@ -25,5 +24,3 @@ function onDOMContentLoaded(cb: () => {}) {
 }
 
 onDOMContentLoaded(() => trackPageView().catch(() => {}));
-
-export { api };

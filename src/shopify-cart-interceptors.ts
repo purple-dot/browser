@@ -244,3 +244,7 @@ function extractAddToCartProperties(
 
   return (data.properties ?? {}) as Record<string, string>;
 }
+
+export function start() {
+  new ShopifyCartAddInterceptor();
+}

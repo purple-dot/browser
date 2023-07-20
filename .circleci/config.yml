@@ -3,7 +3,6 @@ orbs:
   docker: circleci/docker@2.1.1
 
 executors:
-  # Node environment with Chrome installed for Cypress
   node:
     docker: &node_image
       - image: cypress/browsers:node18.12.0-chrome107

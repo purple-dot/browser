@@ -10,7 +10,7 @@
     "format": "rome check --apply-unsafe src/ && rome format --write src/",
     "test": "vitest",
     "coverage": "vitest run --coverage",
-    "start:test-http-server": "yarn --cwd cypress/support dlx http-server . -p 8080",
+    "start:test-http-server": "cd cypress/support && yarn dlx http-server . -p 8080",
     "build:test": "webpack --config cypress/support/webpack.config.js",
     "dev": "webpack --config cypress/support/webpack.config.js --watch"
   },

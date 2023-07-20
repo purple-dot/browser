@@ -24,6 +24,9 @@ jobs:
       - run: yarn lint
       - run: yarn build
       - run: yarn test
+      - run: 
+          command: yarn start:test-http-server 
+          background: true
       - run: yarn cy:run
       - persist_to_workspace:
           root: ~/repo

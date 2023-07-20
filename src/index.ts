@@ -1,7 +1,7 @@
 import cookies from "js-cookie";
 import { injectComponentScripts } from "./web-components";
-import * as api from "./api";
 import { trackPageView } from "./tracking";
+import { onDOMContentLoaded, onLocationChange } from "./custom-events";
 import { Checkout } from "./checkout";
 
 const HOST_URL = "https://www.purpledotprice.com";
@@ -47,5 +47,4 @@ function onDOMContentLoaded(cb: () => {}) {
 }
 
 onDOMContentLoaded(() => trackPageView().catch(() => {}));
-
-export { api };
+onLocationChange(() => trackPageView().catch(() => {}));

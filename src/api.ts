@@ -1,3 +1,5 @@
+import { trackEvent } from "./tracking";
+
 export async function fetchProductsPreorderState(handle: string) {
   const url = new URL(
     "https://www.purpledotprice.com/api/v1/products/preorder-state",
@@ -9,6 +11,11 @@ export async function fetchProductsPreorderState(handle: string) {
   const resp = await fetch(url.toString());
 
   if (resp.ok) {
+    trackEvent("integration.product_viewed", {
+      product_handle: handle,
+      source: "api_call",
+    }).catch(() => {});
+
     const body = await resp.json();
     return body.data;
   }
@@ -53,6 +60,11 @@ export async function fetchVariantsPreorderState(
   const resp = await fetch(url.toString());
 
   if (resp.ok) {
+    trackEvent("integration.sku_selected", {
+      sku_external_id: variantId.toString(),
+      source: "api_call",
+    }).catch(() => {});
+
     const body = await resp.json();
     return body.data;
   }

@@ -43,6 +43,7 @@ jobs:
       - run: 
           command: yarn start:test-http-server 
           background: true
+      - run: yarn run build:test
       - run: yarn cypress run
       - store_test_results:
           path: /root/repo/packages/main/tests/cypress/results

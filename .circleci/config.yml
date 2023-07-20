@@ -14,30 +14,13 @@ executors:
     resource_class: medium
 
 jobs:
-  install:
-    executor: node
-    resource_class: medium
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-      - run: yarn install
-      - save_cache:
-          key: v1-dependencies-{{ checksum "package.json" }}
-          paths:
-            - node_modules 
-      - persist_to_workspace:
-          root: ~/repo
-          paths: .
-
   build:
     executor: node
     resource_class: medium
     steps:
+      - checkout
+      - run: yarn install
       - run: yarn build
-      - attach_workspace:
-          at: ~/repo 
       - persist_to_workspace:
           root: ~/repo
           paths: .
@@ -88,10 +71,7 @@ workflows:
 
   build:
     jobs:
-      - install
-      - build:
-          requires:
-            - install
+      - build
       - lint:
           requires:
             - build

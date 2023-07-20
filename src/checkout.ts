@@ -1,4 +1,4 @@
-import { injectOverlayIframe } from './iframes/overlay-manager';
+import { injectOverlayIframe } from "./iframes/overlay-manager";
 
 /**
  * CoordinatorIframe
@@ -15,56 +15,55 @@ export class Checkout {
   iframeURL() {
     return createURL({
       host: this.hostURL,
-      path: '/embedded-checkout/combined-checkout',
+      path: "/embedded-checkout/combined-checkout",
       queryParams: {
         apiKey: this.apiKey,
       },
     });
   }
 
-  mount({ id }: { 
+  mount({
+    id,
+  }: {
     id: string;
   }) {
     injectOverlayIframe({
-      id: 'checkout-iframe',
+      id: "checkout-iframe",
       hostURL: this.hostURL,
       src: this.iframeURL(),
-      dataRequestHandlers: {
-        clearCart: async () => {
-          // TODO: await ShopifyBehaviour.clearCart();
-        },
-      },
+      dataRequestHandlers: {},
     }).then(() => {
       this.iframe?.contentWindow?.postMessage(
         {
           meta: {
-            type: 'ITEMS',
+            type: "ITEMS",
           },
           data: {
             id,
           },
         },
-        this.hostURL
+        this.hostURL,
       );
     });
 
-    const checkoutIframe = document.querySelector<HTMLIFrameElement>('#checkout-iframe');
+    const checkoutIframe =
+      document.querySelector<HTMLIFrameElement>("#checkout-iframe");
     if (!checkoutIframe) {
       return;
     }
 
-    checkoutIframe.style.visibility = 'visible';
-    checkoutIframe.style.background = 'white';
+    checkoutIframe.style.visibility = "visible";
+    checkoutIframe.style.background = "white";
     this.iframe = checkoutIframe;
 
-    window.addEventListener('message', async (message) => {
+    window.addEventListener("message", async (message) => {
       if (message.origin !== this.hostURL) {
         return;
       }
 
       const { meta, data } = message.data;
-      if (meta && meta.type === 'remove-line-item') {
-        // TODO: await ShopifyBehaviour.removeLineItems(data.externalVariantIds);
+      if (meta && meta.type === "remove-line-item") {
+        // TODO: Remove a line item
 
         /**
          * TODO: Temporary solution to handle removed line items
@@ -72,8 +71,8 @@ export class Checkout {
          * cant process
          */
         window.location.reload();
-      } else if (meta && meta.type === 'redirect-to-checkout') {
-        window.location.href = '/checkout';
+      } else if (meta && meta.type === "redirect-to-checkout") {
+        window.location.href = "/checkout";
       }
     });
   }
@@ -87,7 +86,7 @@ export function createURL({
 }: {
   host: string;
   path: string;
-  queryParams: Record<string, any>;
+  queryParams: Record<string, Object>;
   hash?: string;
 }) {
   const url = new URL(`${host}${path}`);
@@ -97,7 +96,7 @@ export function createURL({
       return;
     }
 
-    if (typeof value === 'object') {
+    if (typeof value === "object") {
       url.searchParams.set(key, JSON.stringify(value));
     } else {
       url.searchParams.set(key, value);

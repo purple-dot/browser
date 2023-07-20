@@ -1,10 +1,10 @@
-import cookies from 'js-cookie';
+import cookies from "js-cookie";
 import { injectComponentScripts } from "./web-components";
 import * as api from "./api";
 import { trackPageView } from "./tracking";
 import { Checkout } from "./checkout";
 
-const HOST_URL = 'https://www.purpledotprice.com';
+const HOST_URL = "https://www.purpledotprice.com";
 
 export interface PurpleDotConfig {
   apiKey: string;
@@ -16,16 +16,14 @@ export function init(config: PurpleDotConfig) {
   };
 
   injectComponentScripts();
-
-  // Check the if we are on the cart page
 }
 
 export const cart = {
   getShopifyAJAXCartID() {
-    const shopifyCartId = cookies.get('cart')
+    const shopifyCartId = cookies.get("cart");
     return shopifyCartId;
-  }
-} 
+  },
+};
 
 export const checkout = {
   open({ cartId }: { cartId: string; currency: string }) {
@@ -35,8 +33,8 @@ export const checkout = {
     );
 
     checkout.mount({ id: cartId });
-  }
-}
+  },
+};
 
 function onDOMContentLoaded(cb: () => {}) {
   if (document.readyState === "loading") {

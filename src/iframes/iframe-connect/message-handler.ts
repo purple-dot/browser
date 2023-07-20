@@ -1,6 +1,19 @@
-import isControllerMessage from './is-controller-message';
+import isControllerMessage from "./is-controller-message";
 
-function messageHandler(messageType: string, callback: ({ meta, data }: { meta: any; data: any}) => void) {
+function messageHandler(
+  messageType: string,
+  callback: ({
+    meta,
+    data,
+  }: {
+    meta: Record<string, Object>;
+    data: {
+      key: string;
+      eventName: string;
+      eventData: Record<string, Object> | string | number;
+    };
+  }) => void,
+) {
   return (event: MessageEvent) => {
     if (!isControllerMessage(event)) {
       return;

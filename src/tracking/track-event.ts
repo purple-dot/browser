@@ -5,7 +5,7 @@ import getDeviceId from "./device-id";
 
 export async function trackEvent(
   name: string,
-  attrs: Record<string, string> = {},
+  attrs: Record<string, string | null> = {},
 ) {
   const { deviceId, storage } = getDeviceId();
   const cartToken = cookies.get("cart") ?? null;

@@ -10,8 +10,9 @@
     "format": "rome check --apply-unsafe src/ && rome format --write src/",
     "test": "vitest",
     "coverage": "vitest run --coverage",
-    "cy:open": "cd cypress/support && npx http-server . -p 8080& cd ../.. && cypress open",
-    "cy:run": "cd cypress/support && npx http-server . -p 8080& cd ../.. && cypress run"
+    "start:test-http-server": "cd cypress/support && yarn dlx http-server . -p 8080",
+    "cy:open": "cypress open",
+    "cy:run": "cd cypress/support && yarn webpack --config webpack.config.js && cd ../.. && cypress run"
   },
   "repository": {
     "type": "git",

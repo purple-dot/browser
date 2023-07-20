@@ -27,7 +27,7 @@ jobs:
       - run: 
           command: yarn start:test-http-server 
           background: true
-      - run: yarn cy:run
+      - run: yarn cypress run 
       - persist_to_workspace:
           root: ~/repo
           paths: .

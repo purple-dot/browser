@@ -1,5 +1,6 @@
 import cookies from 'js-cookie';
 import { injectComponentScripts } from "./web-components";
+import * as api from "./api";
 import { trackPageView } from "./tracking";
 import { Checkout } from "./checkout";
 
@@ -48,3 +49,5 @@ function onDOMContentLoaded(cb: () => {}) {
 }
 
 onDOMContentLoaded(() => trackPageView().catch(() => {}));
+
+export { api };

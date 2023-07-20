@@ -21,16 +21,30 @@ jobs:
     steps:
       - checkout
       - run: yarn install
-      - run: yarn lint
       - run: yarn build
+      - persist_to_workspace:
+          root: ~/repo
+          paths: .
+
+  lint: 
+    executor: node
+    resource_class: medium
+    steps:
+      - attach_workspace:
+          at: ~/repo 
+      - run: yarn lint
+    
+  test: 
+    executor: node
+    resource_class: medium
+    steps:
+      - attach_workspace:
+          at: ~/repo 
       - run: yarn test
       - run: 
           command: yarn start:test-http-server 
           background: true
-      - run: yarn cypress run 
-      - persist_to_workspace:
-          root: ~/repo
-          paths: .
+      - run: yarn cypress run
 
   publish:
     executor: node
@@ -50,6 +64,12 @@ workflows:
   build:
     jobs:
       - build
+      - lint:
+          requires:
+            - build
+      - test: 
+          requires:
+            - build
       - publish:
           requires:
             - build

@@ -44,6 +44,14 @@ jobs:
           command: yarn start:test-http-server 
           background: true
       - run: yarn cypress run
+      - store_test_results:
+          path: /root/repo/packages/main/tests/cypress/results
+      - store_artifacts:
+          path: /root/repo/packages/main/tests/cypress/videos
+          destination: cypress-videos
+      - store_artifacts:
+          path: /root/repo/packages/main/tests/cypress/screenshots
+          destination: cypress-screenshots 
 
   publish:
     executor: node

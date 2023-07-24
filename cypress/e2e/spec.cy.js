@@ -11,9 +11,11 @@ describe('opening a checkout', () => {
     // Wait for the components to be registered 
     cy.wait(1000);
 
+    cy.setCookie('cart', 'bcc9daa54d4eb89b36df5321dd087ab2')
+
     cy.window().then((win) => {
       win.PurpleDot.checkout.open({
-        cartId: 'bcc9daa54d4eb89b36df5321dd087ab2',
+        cartId: win.PurpleDot.cart.getShopifyAJAXCartID(),
       });
     });
 

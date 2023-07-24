@@ -52,8 +52,28 @@ const ShopifyCart: Cart<ShopifyCartItem> = {
   },
 
   async decrementQuantity(id: string) {
-    // See https://github.com/purple-dot/browser/blob/main/src/shopify-cart.ts
-    // TODO: Fetch the cart and decrement one of the matching line items
+    const cartResponse = await fetch("/cart.js");
+    const cart = await cartResponse.json();
+
+    const lineItem = cart.items.find(
+      (item: { id: number }) => item.id.toString() === id,
+    );
+
+    if (lineItem) {
+      const updates = {
+        [lineItem.id]: lineItem.quantity - 1,
+      };
+
+      await fetch("/cart/update.js", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          updates,
+        }),
+      });
+    }
   },
 
   async clear() {

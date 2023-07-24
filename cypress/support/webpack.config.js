@@ -4,7 +4,7 @@ const path = require("path");
 
 module.exports = {
   mode: "development",
-  entry: './built-script.ts',
+  entry: path.resolve(__dirname, "built-script.ts"),
   output: {
     filename: "output.js",
     path: path.resolve(__dirname, "dist"),

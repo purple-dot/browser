@@ -16,5 +16,5 @@ export function onLocationChange(cb: () => {}) {
       cb();
       oldUrl = newUrl;
     }
-  }).observe(document.body);
+  }).observe(document.body, { attributes: true });
 }

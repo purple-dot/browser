@@ -1,5 +1,6 @@
 export function injectComponentScripts() {
   injectScriptOnce(makeLearnMoreScript());
+  injectScriptOnce(makeCheckoutScript());
 }
 
 function injectScriptOnce(el: HTMLScriptElement) {
@@ -9,10 +10,24 @@ function injectScriptOnce(el: HTMLScriptElement) {
 }
 
 function makeLearnMoreScript() {
-  const learnMoreScript = document.createElement("script");
-  learnMoreScript.id = "pd-learn-more-script";
-  learnMoreScript.src = "https://www.purpledotprice.com/api/v1/learn-more.js";
-  learnMoreScript.async = true;
-  learnMoreScript.defer = true;
-  return learnMoreScript;
+  return makeScriptTag({
+    id: "pd-learn-more-script",
+    src: "https://www.purpledotprice.com/api/v1/learn-more.js",
+  });
+}
+
+function makeCheckoutScript() {
+  return makeScriptTag({
+    id: "pd-checkout-script",
+    src: "https://www.purpledotprice.com/api/v1/checkout.js",
+  });
+}
+
+function makeScriptTag({ id, src }: { id: string; src: string }) {
+  const script = document.createElement("script");
+  script.id = id;
+  script.src = src;
+  script.async = true;
+  script.defer = true;
+  return script;
 }

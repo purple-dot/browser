@@ -11,8 +11,8 @@
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "start:test-http-server": "cd cypress/support && yarn dlx http-server . -p 8080",
-    "cy:open": "cypress open",
-    "cy:run": "cd cypress/support && yarn webpack --config webpack.config.js && cd ../.. && cypress run"
+    "build:test": "webpack --config cypress/support/webpack.config.js",
+    "dev": "webpack --config cypress/support/webpack.config.js --watch"
   },
   "repository": {
     "type": "git",

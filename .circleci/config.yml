@@ -3,7 +3,6 @@ orbs:
   docker: circleci/docker@2.1.1
 
 executors:
-  # Node environment with Chrome installed for Cypress
   node:
     docker: &node_image
       - image: cypress/browsers:node18.12.0-chrome107
@@ -21,16 +20,39 @@ jobs:
     steps:
       - checkout
       - run: yarn install
-      - run: yarn lint
       - run: yarn build
+      - persist_to_workspace:
+          root: ~/repo
+          paths: .
+
+  lint: 
+    executor: node
+    resource_class: medium
+    steps:
+      - attach_workspace:
+          at: ~/repo 
+      - run: yarn lint
+    
+  test: 
+    executor: node
+    resource_class: medium
+    steps:
+      - attach_workspace:
+          at: ~/repo 
       - run: yarn test
       - run: 
           command: yarn start:test-http-server 
           background: true
-      - run: yarn cy:run
-      - persist_to_workspace:
-          root: ~/repo
-          paths: .
+      - run: yarn run build:test
+      - run: yarn cypress run
+      - store_test_results:
+          path: /root/repo/cypress/results
+      - store_artifacts:
+          path: /root/repo/cypress/videos
+          destination: cypress-videos
+      - store_artifacts:
+          path: /root/repo/cypress/screenshots
+          destination: cypress-screenshots 
 
   publish:
     executor: node
@@ -50,9 +72,17 @@ workflows:
   build:
     jobs:
       - build
+      - lint:
+          requires:
+            - build
+      - test: 
+          requires:
+            - build
       - publish:
           requires:
             - build
+            - lint
+            - test
           filters:
             branches:
               only: main

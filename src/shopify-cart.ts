@@ -52,7 +52,12 @@ const ShopifyCart: Cart<ShopifyCartItem> = {
   },
 
   async decrementQuantity(id: string) {
+    // See https://github.com/purple-dot/browser/blob/main/src/shopify-cart.ts
     // TODO: Fetch the cart and decrement one of the matching line items
+  },
+
+  async clear() {
+    await fetch("/cart/clear.js", { method: "POST" });
   },
 };
 

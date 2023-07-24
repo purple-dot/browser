@@ -20,4 +20,5 @@ export interface Cart<T extends CartItem> {
 
   // Mutations
   decrementQuantity: (id: string) => Promise<void>;
+  clear: () => Promise<void>;
 }

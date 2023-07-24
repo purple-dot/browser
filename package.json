@@ -3,7 +3,7 @@
   "name": "@purple-dot/browser",
   "description": "Purple Dot Browser SDK",
   "license": "Apache-2.0",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "scripts": {
     "build": "tsc",
     "lint": "rome ci src/",
@@ -38,10 +38,6 @@
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4",
     "whatwg-fetch": "^3.6.2"
-  },
-  "engines": {
-    "node": "18.16.x",
-    "yarn": "3.6.x"
   },
   "packageManager": "yarn@3.6.1",
   "dependencies": {

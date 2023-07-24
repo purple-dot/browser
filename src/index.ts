@@ -2,7 +2,6 @@ import cookies from "js-cookie";
 import { injectComponentScripts } from "./web-components";
 import { trackPageView } from "./tracking";
 import { onDOMContentLoaded, onLocationChange } from "./custom-events";
-import { Checkout } from "./checkout";
 
 const HOST_URL = "https://www.purpledotprice.com";
 
@@ -27,12 +26,11 @@ export const cart = {
 
 export const checkout = {
   open({ cartId }: { cartId: string; currency: string }) {
-    const checkout = new Checkout(
-      HOST_URL,
-      window.PurpleDotConfig?.apiKey as string,
-    );
+    const element = document.createElement("purple-dot-checkout");
+    document.body.appendChild(element);
 
-    checkout.mount({ id: cartId });
+    // @ts-ignore
+    element.open({ cartId });
   },
 };
 

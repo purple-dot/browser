@@ -12,7 +12,8 @@
     "coverage": "vitest run --coverage",
     "start:test-http-server": "cd cypress/support && yarn dlx http-server . -p 8080",
     "build:test": "webpack --config cypress/support/webpack.config.js",
-    "dev": "webpack --config cypress/support/webpack.config.js --watch"
+    "dev": "webpack --config cypress/support/webpack.config.js --watch",
+    "prepare": "rm -r dist/ && yarn build"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,7 @@
     "url": "https://github.com/purple-dot/browser/issues"
   },
   "homepage": "https://github.com/purple-dot/browser#readme",
+  "files": ["dist/*"],
   "main": "dist/index.js",
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.2",

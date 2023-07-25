@@ -3,7 +3,7 @@
   "name": "@purple-dot/browser",
   "description": "Purple Dot Browser SDK",
   "license": "Apache-2.0",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "scripts": {
     "build": "tsc",
     "lint": "rome ci src/ tests/ cypress/",
@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/purple-dot/browser#readme",
   "files": [
-    "dist/*"
+    "dist/**/*"
   ],
   "exports": {
     ".": "dist/index.js",

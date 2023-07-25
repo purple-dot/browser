@@ -1,7 +1,10 @@
 import {
+  BodyData,
   JSONObject,
   RequestInterceptor,
+  
   makeFetchRequestBody,
+  
   parseFetchRequestBody,
   shopifyUrlStartsWith,
 } from "./interceptors";
@@ -33,8 +36,8 @@ async function onAddToCart([input, init]: [
   }
 
   if (init.method?.toUpperCase() === "POST" || init.body) {
-    let requestBody: ReturnType<typeof parseFetchRequestBody>;
-
+   
+    let requestBody: BodyData;
     try {
       requestBody = parseFetchRequestBody(init);
     } catch (err) {
@@ -72,7 +75,7 @@ async function onAddToCart([input, init]: [
     }
 
     // Try to convert it back to the same kind of request we started with.
-    let newBody: FormData | URLSearchParams | JSONObject = requestBody;
+    let newBody = requestBody;
 
     if ("items" in requestBody) {
       newBody = shopifyAJAXAddToCart(updatedItems);

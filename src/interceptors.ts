@@ -1,5 +1,6 @@
 export type FetchParams = [input: string | URL, init?: RequestInit];
 export type JSONObject = { [key: string]: unknown };
+export type BodyData = FormData | URLSearchParams | JSONObject;
 
 type InterceptHandler<A> = (
   request: A,
@@ -201,9 +202,7 @@ export class RequestInterceptor extends Interceptor<Callback> {
   }
 }
 
-export function parseFetchRequestBody(
-  init: RequestInit,
-): FormData | URLSearchParams | JSONObject {
+export function parseFetchRequestBody(init: RequestInit): BodyData {
   if (typeof init.body === "string") {
     const headers = new Headers(init.headers);
     const contentType = headers.get("content-type");
@@ -233,27 +232,28 @@ export function parseFetchRequestBody(
   throw new TypeError("request body could not be parsed");
 }
 
-export function makeFetchRequestBody(
-  init: RequestInit,
-  body: ReturnType<typeof parseFetchRequestBody>,
-): URLSearchParams | FormData | string {
-  if (typeof init.body === "string" && typeof body !== "string") {
-    if (body instanceof URLSearchParams || body instanceof FormData) {
-      return body.toString();
+export function makeFetchRequestBody(init: RequestInit, newBody: BodyData) {
+  const headers = new Headers(init.headers);
+  const contentType = headers.get("content-type");
+
+  if (typeof init.body === "string") {
+    if (contentType === "application/json") {
+      return JSON.stringify(newBody);
     }
-    return JSON.stringify(body);
+
+    if (contentType === "application/x-www-form-urlencoded") {
+      return newBody.toString();
+    }
   }
 
   if (
-    body instanceof URLSearchParams ||
-    body instanceof FormData ||
-    typeof body === "string"
+    (init.body instanceof FormData || init.body instanceof URLSearchParams) &&
+    (newBody instanceof FormData || newBody instanceof URLSearchParams)
   ) {
-    return body;
+    return newBody;
   }
 
-  // This should really never happen since we decoded it in the first place.
-  throw new Error(`unable to encode body: ${typeof body} ${body}`);
+  throw new TypeError("request body could not be encoded");
 }
 
 export function shopifyUrlStartsWith(url: URL | string, prefix: string) {

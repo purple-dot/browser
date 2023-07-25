@@ -2,7 +2,7 @@
 
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
-import { ShopifyCartAddInterceptor } from "../src/shopify-cart-interceptors";
+import { ShopifyAJAXCartAddInterceptor } from "../src/shopify-cart-interceptors";
 
 const jsonHeader = { "Content-Type": "application/json" };
 const formHeader = { "Content-Type": "application/x-www-form-urlencoded" };
@@ -16,7 +16,7 @@ describe("ShopifyAddToCartInterceptor", () => {
 
   describe("AJAX request", () => {
     test("not on preorder", async () => {
-      new ShopifyCartAddInterceptor();
+      new ShopifyAJAXCartAddInterceptor();
 
       await window.fetch("/cart/add.js", {
         method: "POST",
@@ -64,7 +64,7 @@ describe("ShopifyAddToCartInterceptor", () => {
         }
       });
 
-      new ShopifyCartAddInterceptor();
+      new ShopifyAJAXCartAddInterceptor();
 
       await window.fetch("/cart/add.js", {
         method: "POST",
@@ -94,7 +94,7 @@ describe("ShopifyAddToCartInterceptor", () => {
 
   describe("Form request", () => {
     test("not on preorder", async () => {
-      new ShopifyCartAddInterceptor();
+      new ShopifyAJAXCartAddInterceptor();
 
       await window.fetch("/cart/add", {
         method: "POST",
@@ -136,7 +136,7 @@ describe("ShopifyAddToCartInterceptor", () => {
         }
       });
 
-      new ShopifyCartAddInterceptor();
+      new ShopifyAJAXCartAddInterceptor();
 
       await window.fetch("/cart/add.js", {
         method: "POST",

@@ -6,8 +6,8 @@
   "version": "0.0.7",
   "scripts": {
     "build": "tsc",
-    "lint": "rome ci src/",
-    "format": "rome check --apply-unsafe src/ && rome format --write src/",
+    "lint": "rome ci src/ tests/ cypress/",
+    "format": "rome check --apply-unsafe src/ tests/ cypress/ && rome format --write src/ tests/ cypress/",
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "start:test-http-server": "cd cypress/support && yarn dlx http-server . -p 8080",

@@ -1,4 +1,4 @@
-import * as PurpleDot from '../../src/index';
+import * as PurpleDot from "../../src/index";
 
 declare global {
   interface Window {

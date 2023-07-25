@@ -5,8 +5,9 @@ import {
   parseFetchRequestBody,
   shopifyUrlStartsWith,
 } from "./interceptors";
-import ShopifyCart, {
-  ShopifyCartItem,
+import {
+  ShopifyAJAXCart,
+  ShopifyAJAXCartItem,
   updatePreorderAttributes,
 } from "./shopify-cart";
 import { trackEvent } from "./tracking";
@@ -15,7 +16,7 @@ function shouldIntercept(input: string | URL) {
   return shopifyUrlStartsWith(input, "cart/add");
 }
 
-export class ShopifyCartAddInterceptor extends RequestInterceptor {
+export class ShopifyAJAXCartAddInterceptor extends RequestInterceptor {
   constructor() {
     super(shouldIntercept);
 
@@ -54,7 +55,7 @@ async function onAddToCart([input, init]: [
     // Keep track of if we find anything that needs changing so we can avoid changing things that don't need it.
     let changed = false;
 
-    const updatedItems: ShopifyCartItem[] = [];
+    const updatedItems: ShopifyAJAXCartItem[] = [];
     for (const item of newItems) {
       const updatedItem = await updatePreorderAttributes(item);
       if (updatedItem) {
@@ -116,12 +117,12 @@ async function onAddToCart([input, init]: [
 
 function getItemsFromRequest(
   data: FormData | URLSearchParams | JSONObject,
-): ShopifyCartItem[] {
+): ShopifyAJAXCartItem[] {
   // Fix the documented /cart/add.js API
   // https://shopify.dev/api/ajax/reference/cart
 
   if ("items" in data) {
-    const pdAddToCartRequests: ShopifyCartItem[] = [];
+    const pdAddToCartRequests: ShopifyAJAXCartItem[] = [];
 
     const items = data["items"];
 
@@ -149,7 +150,7 @@ function getItemsFromRequest(
 
   const properties = extractAddToCartProperties(data);
 
-  const pdRequests: ShopifyCartItem[] = [
+  const pdRequests: ShopifyAJAXCartItem[] = [
     {
       variantId,
       quantity,
@@ -171,7 +172,7 @@ function getValue(
   }
 }
 
-function shopifyAJAXAddToCart(request: ShopifyCartItem[]) {
+function shopifyAJAXAddToCart(request: ShopifyAJAXCartItem[]) {
   const items = request.map((item) => {
     return {
       id: item.id,
@@ -185,7 +186,7 @@ function shopifyAJAXAddToCart(request: ShopifyCartItem[]) {
   };
 }
 
-function shopifyFormAddToCart(request: ShopifyCartItem[]) {
+function shopifyFormAddToCart(request: ShopifyAJAXCartItem[]) {
   // Convert to a /cart/add request
   const newBody = new URLSearchParams();
 
@@ -202,7 +203,7 @@ function shopifyFormAddToCart(request: ShopifyCartItem[]) {
 }
 
 function applyURLEncodedAddToCart(
-  item: ShopifyCartItem,
+  item: ShopifyAJAXCartItem,
   target: URLSearchParams,
 ) {
   const newProperties = item.properties;
@@ -227,7 +228,7 @@ function applyURLEncodedAddToCart(
   }
 
   // Disable the checkout redirect if this is a preorder
-  if (ShopifyCart.hasPreorderAttributes(item)) {
+  if (ShopifyAJAXCart.hasPreorderAttributes(item)) {
     target.delete("checkout");
   }
 }
@@ -254,5 +255,5 @@ function extractAddToCartProperties(
 }
 
 export function start() {
-  new ShopifyCartAddInterceptor();
+  new ShopifyAJAXCartAddInterceptor();
 }

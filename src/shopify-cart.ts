@@ -1,19 +1,20 @@
+import cookies from "js-cookie";
 import { fetchVariantsPreorderState } from "./api";
 import { Cart, CartItem, PreorderAttributes } from "./cart";
 import { JSONObject } from "./interceptors";
 
-export type ShopifyCartItem = CartItem & {
+export type ShopifyAJAXCartItem = CartItem & {
   id?: string;
   quantity?: number;
   properties?: Record<string, string>;
 };
 
-export const ShopifyCart: Cart<ShopifyCartItem> = {
-  hasPreorderAttributes(item: ShopifyCartItem): boolean {
+export const ShopifyAJAXCart: Cart<ShopifyAJAXCartItem> = {
+  hasPreorderAttributes(item: ShopifyAJAXCartItem): boolean {
     return !!item.properties?.["__releaseId"];
   },
 
-  addPreorderAttributes(item: ShopifyCartItem, attrs: PreorderAttributes) {
+  addPreorderAttributes(item: ShopifyAJAXCartItem, attrs: PreorderAttributes) {
     return {
       id: item.id,
       variantId: item.variantId,
@@ -25,7 +26,7 @@ export const ShopifyCart: Cart<ShopifyCartItem> = {
     };
   },
 
-  removePreorderAttributes(item: ShopifyCartItem) {
+  removePreorderAttributes(item: ShopifyAJAXCartItem) {
     return {
       id: item.id,
       variantId: item.variantId,
@@ -83,11 +84,16 @@ export const ShopifyCart: Cart<ShopifyCartItem> = {
   async navigateToCheckout() {
     window.location.href = "/checkout";
   },
+
+  async getCartId() {
+    const shopifyCartId = cookies.get("cart");
+    return shopifyCartId ?? null;
+  },
 };
 
 export async function updatePreorderAttributes(
-  item: ShopifyCartItem,
-): Promise<ShopifyCartItem | null> {
+  item: ShopifyAJAXCartItem,
+): Promise<ShopifyAJAXCartItem | null> {
   const variantId = parseFloat(item.variantId);
   const preorderState = await fetchVariantsPreorderState(variantId);
 
@@ -101,11 +107,11 @@ export async function updatePreorderAttributes(
       displayShipDates: preorderState.waitlist.display_dispatch_date,
     };
 
-    return ShopifyCart.addPreorderAttributes(item, attributes);
+    return ShopifyAJAXCart.addPreorderAttributes(item, attributes);
   }
 
-  if (ShopifyCart.hasPreorderAttributes(item)) {
-    return ShopifyCart.removePreorderAttributes(item);
+  if (ShopifyAJAXCart.hasPreorderAttributes(item)) {
+    return ShopifyAJAXCart.removePreorderAttributes(item);
   }
 
   return null;

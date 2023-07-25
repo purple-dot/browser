@@ -3,7 +3,7 @@
   "name": "@purple-dot/browser",
   "description": "Purple Dot Browser SDK",
   "license": "Apache-2.0",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "scripts": {
     "build": "tsc",
     "lint": "rome ci src/ tests/ cypress/",
@@ -27,12 +27,12 @@
     "dist/**/*"
   ],
   "exports": {
-    ".": "dist/index.js",
-    "./api": "dist/api.js",
-    "./checkout": "dist/checkout.js",
-    "./cart": "dist/cart.js",
-    "./shopify-ajax-cart": "dist/shopify-cart",
-    "./shopify-ajax-interceptors": "dist/shopify-cart-interceptors"
+    ".": "./dist/index.js",
+    "./api": "./dist/api.js",
+    "./checkout": "./dist/checkout.js",
+    "./cart": "./dist/cart.js",
+    "./shopify-ajax-cart": "./dist/shopify-cart.js",
+    "./shopify-ajax-interceptors": "./dist/shopify-cart-interceptors.js"
   },
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.2",

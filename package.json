@@ -23,8 +23,17 @@
     "url": "https://github.com/purple-dot/browser/issues"
   },
   "homepage": "https://github.com/purple-dot/browser#readme",
-  "files": ["dist/*"],
-  "main": "dist/index.js",
+  "files": [
+    "dist/*"
+  ],
+  "exports": {
+    ".": "dist/index.js",
+    "./api": "dist/api.js",
+    "./checkout": "dist/checkout.js",
+    "./cart": "dist/cart.js",
+    "./shopify-ajax-cart": "dist/shopify-cart",
+    "./shopify-ajax-interceptors": "dist/shopify-cart-interceptors"
+  },
   "devDependencies": {
     "@tsconfig/recommended": "^1.0.2",
     "@types/js-cookie": "^3.0.3",
@@ -45,5 +54,8 @@
   "dependencies": {
     "js-cookie": "^3.0.5",
     "uuid": "^9.0.0"
+  },
+  "engines": {
+    "node": ">=10.0.0"
   }
 }

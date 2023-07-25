@@ -8,7 +8,7 @@ export type ShopifyCartItem = CartItem & {
   properties?: Record<string, string>;
 };
 
-const ShopifyCart: Cart<ShopifyCartItem> = {
+export const ShopifyCart: Cart<ShopifyCartItem> = {
   hasPreorderAttributes(item: ShopifyCartItem): boolean {
     return !!item.properties?.["__releaseId"];
   },
@@ -79,6 +79,10 @@ const ShopifyCart: Cart<ShopifyCartItem> = {
   async clear() {
     await fetch("/cart/clear.js", { method: "POST" });
   },
+
+  async navigateToCheckout() {
+    window.location.href = "/checkout";
+  },
 };
 
 export async function updatePreorderAttributes(
@@ -106,5 +110,3 @@ export async function updatePreorderAttributes(
 
   return null;
 }
-
-export default ShopifyCart;

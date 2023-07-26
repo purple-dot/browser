@@ -24,3 +24,8 @@ export interface Cart<T extends CartItem> {
   clear: () => Promise<void>;
   navigateToCheckout: () => Promise<void>;
 }
+
+export async function cartHasPreorderItem(cart: Cart) {
+  const items = await cart.fetchItems();
+  return items.some(i => cart.hasPreorderAttributes(i));
+}

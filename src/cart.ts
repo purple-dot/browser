@@ -1,3 +1,5 @@
+import { ShopifyAJAXCartItem } from "./shopify-cart";
+
 export type ShipDates = {
   earliest: Date;
   latest: Date;
@@ -23,4 +25,9 @@ export interface Cart<T extends CartItem> {
   decrementQuantity: (id: string) => Promise<void>;
   clear: () => Promise<void>;
   navigateToCheckout: () => Promise<void>;
+}
+
+export async function cartHasPreorderItem(cart: Cart<CartItem>) {
+  const items = await cart.fetchItems();
+  return items.some((i) => cart.hasPreorderAttributes(i));
 }

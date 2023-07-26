@@ -2,9 +2,7 @@ import {
   BodyData,
   JSONObject,
   RequestInterceptor,
-  
   makeFetchRequestBody,
-  
   parseFetchRequestBody,
   shopifyUrlStartsWith,
 } from "./interceptors";
@@ -36,7 +34,6 @@ async function onAddToCart([input, init]: [
   }
 
   if (init.method?.toUpperCase() === "POST" || init.body) {
-   
     let requestBody: BodyData;
     try {
       requestBody = parseFetchRequestBody(init);

@@ -4,7 +4,10 @@ describe("opening a checkout", () => {
     cy.window().should("have.attr", "PurpleDot");
 
     cy.window().then((win) => {
-      win.PurpleDot.init({ apiKey: "b351faa2-8693-4c09-b814-759beed90d0b" });
+      win.PurpleDot.init({
+        apiKey: "b351faa2-8693-4c09-b814-759beed90d0b",
+        cartAdapter: win.PurpleDot.ShopifyAJAXCart,
+      });
     });
 
     // Wait for the components to be registered
@@ -13,9 +16,7 @@ describe("opening a checkout", () => {
     cy.setCookie("cart", "bcc9daa54d4eb89b36df5321dd087ab2");
 
     cy.window().then(async (win) => {
-      win.PurpleDot.checkout.open({
-        cartId: await win.PurpleDot.ShopifyAJAXCart.getCartId(),
-      });
+      await win.PurpleDot.checkout.open();
     });
 
     cy.get("#checkout-iframe").should("exist");

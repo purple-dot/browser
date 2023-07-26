@@ -1,5 +1,3 @@
-import { ShopifyAJAXCartItem } from "./shopify-cart";
-
 export type ShipDates = {
   earliest: Date;
   latest: Date;

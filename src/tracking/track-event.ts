@@ -5,7 +5,8 @@ import getDeviceId from "./device-id";
 
 export async function trackEvent(
   name: string,
-  attrs: Record<string, string | null> = {},
+  // rome-ignore lint/suspicious/noExplicitAny: any is the right type here
+  attrs: Record<string, any> = {},
 ) {
   const { deviceId, storage } = getDeviceId();
   const cartToken = cookies.get("cart") ?? null;

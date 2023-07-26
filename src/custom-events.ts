@@ -1,4 +1,4 @@
-export function onDOMContentLoaded(cb: () => {}) {
+export function onDOMContentLoaded(cb: () => void) {
   if (document.readyState === "loading") {
     // Loading hasn't finished yet
     document.addEventListener("DOMContentLoaded", cb);
@@ -8,7 +8,7 @@ export function onDOMContentLoaded(cb: () => {}) {
   }
 }
 
-export function onLocationChange(cb: () => {}) {
+export function onLocationChange(cb: () => void) {
   let oldUrl = window.location.href;
   new MutationObserver(() => {
     const newUrl = window.location.href;
@@ -17,4 +17,14 @@ export function onLocationChange(cb: () => {}) {
       oldUrl = newUrl;
     }
   }).observe(document.body, { attributes: true });
+}
+
+export function onPurpleDotEvent(name: string, cb: (data: object) => void) {
+  window.addEventListener(`PurpleDot:${name}`, (event) => {
+    if (!(event instanceof CustomEvent)) {
+      return;
+    }
+
+    cb(event.detail);
+  });
 }

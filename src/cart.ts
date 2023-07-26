@@ -25,7 +25,16 @@ export interface Cart<T extends CartItem> {
   navigateToCheckout: () => Promise<void>;
 }
 
-export async function cartHasPreorderItem(cart: Cart<CartItem>) {
+export async function cartHasPreorderItem() {
+  const cart = getCartAdapter();
   const items = await cart.fetchItems();
   return items.some((i) => cart.hasPreorderAttributes(i));
+}
+
+export function getCartAdapter(): Cart<CartItem> {
+  const cart = window.PurpleDotConfig?.cartAdapter;
+  if (!cart) {
+    throw new Error("@purple-dot/browser not initialised");
+  }
+  return cart;
 }

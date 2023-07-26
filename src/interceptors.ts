@@ -205,7 +205,7 @@ export class RequestInterceptor extends Interceptor<Callback> {
 export function parseFetchRequestBody(init: RequestInit): BodyData {
   if (typeof init.body === "string") {
     const headers = new Headers(init.headers);
-    const contentType = headers.get("content-type");
+    const contentType = headers.get("content-type")?.toLowerCase();
 
     if (contentType === "application/json") {
       return JSON.parse(init.body);
@@ -238,7 +238,15 @@ export function makeFetchRequestBody(init: RequestInit, newBody: BodyData) {
 
   if (typeof init.body === "string") {
     if (contentType === "application/json") {
-      return JSON.stringify(newBody);
+      if (newBody instanceof FormData || newBody instanceof URLSearchParams) {
+        const data: JSONObject = {};
+        newBody.forEach((value, key) => {
+          data[key] = value;
+        });
+        return JSON.stringify(data);
+      } else {
+        return JSON.stringify(newBody);
+      }
     }
 
     if (contentType === "application/x-www-form-urlencoded") {

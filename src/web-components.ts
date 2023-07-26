@@ -3,8 +3,40 @@ export function injectComponentScripts() {
   injectScriptOnce(makeCheckoutScript());
 }
 
+type Callback = () => void;
+
+const callbacks: Record<string, Callback[] | "loaded"> = {};
+
+export function onceCheckoutScriptLoaded(cb: Callback) {
+  onceScriptLoaded("pd-checkout-script", cb);
+}
+
+function onceScriptLoaded(id: string, cb: Callback) {
+  if (callbacks[id] === "loaded") {
+    cb();
+  } else {
+    if (Array.isArray(callbacks[id])) {
+      (callbacks[id] as Callback[]).push(cb);
+    } else {
+      callbacks[id] = [cb];
+    }
+  }
+}
+
+function onScriptLoaded(el: HTMLScriptElement) {
+  return () => {
+    if (el.id in callbacks && Array.isArray(callbacks[el.id])) {
+      for (const cb of callbacks[el.id] as Callback[]) {
+        cb();
+      }
+    }
+    callbacks[el.id] = "loaded";
+  };
+}
+
 function injectScriptOnce(el: HTMLScriptElement) {
   if (!document.getElementById(el.id)) {
+    el.addEventListener("load", onScriptLoaded(el));
     document.head.append(el);
   }
 }

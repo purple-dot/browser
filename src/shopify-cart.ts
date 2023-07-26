@@ -18,6 +18,7 @@ export const ShopifyAJAXCart: Cart<ShopifyAJAXCartItem> = {
     return {
       id: item.id,
       variantId: item.variantId,
+      quantity: item.quantity,
       properties: {
         ...item.properties,
         __releaseId: attrs.releaseId,
@@ -30,6 +31,7 @@ export const ShopifyAJAXCart: Cart<ShopifyAJAXCartItem> = {
     return {
       id: item.id,
       variantId: item.variantId,
+      quantity: item.quantity,
       properties: Object.fromEntries(
         Object.entries(item.properties ?? {}).filter(
           ([key]) => key !== "__releaseId" && key !== "Purple Dot Pre-order",

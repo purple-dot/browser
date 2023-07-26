@@ -72,23 +72,30 @@ async function onAddToCart([input, init]: [
     }
 
     // Try to convert it back to the same kind of request we started with.
-    let newBody = requestBody;
+    const headers = new Headers(init.headers);
+    const contentType = headers.get("content-type")?.toLowerCase();
 
-    if ("items" in requestBody) {
-      newBody = shopifyAJAXAddToCart(updatedItems);
-    } else {
-      if (newItems.length > 1) {
-        console.error(
-          "Purple Dot: Only a single item can be added to the cart at a time when using /cart/add",
-          { request: [input, init], newItems },
-        );
-        return [input, init];
+    if (contentType === "application/json") {
+      const newBody = shopifyAJAXAddToCart(updatedItems);
+
+      // Original request was only for a single item, so we also return a single item.
+      if ("id" in requestBody) {
+        return [input, { ...init, body: JSON.stringify(newBody.items[0]) }];
       }
 
-      newBody = shopifyFormAddToCart(updatedItems);
+      return [input, { ...init, body: JSON.stringify(newBody) }];
     }
 
-    return [input, { ...init, body: makeFetchRequestBody(init, newBody) }];
+    if (newItems.length > 1) {
+      console.error(
+        "Purple Dot: Only a single item can be added to the cart at a time when using /cart/add",
+        { request: [input, init], newItems },
+      );
+      return [input, init];
+    }
+
+    const newBody = shopifyFormAddToCart(updatedItems);
+    return [input, { ...init, body: newBody.toString() }];
   }
 
   if (init.method?.toUpperCase() === "GET") {
@@ -128,11 +135,16 @@ function getItemsFromRequest(
 
     if (Array.isArray(items)) {
       for (const item of items) {
-        pdAddToCartRequests.push({
+        const newItem: ShopifyAJAXCartItem = {
           variantId: `${item.id}`,
-          quantity: parseFloat(item.quantity ?? "1"),
-          properties: item.properties ?? {},
-        });
+          properties: item.properties,
+        };
+
+        if (item.quantity || item.quantity === 0) {
+          newItem.quantity = parseFloat(item.quantity);
+        }
+
+        pdAddToCartRequests.push(newItem);
       }
     }
 
@@ -172,18 +184,20 @@ function getValue(
   }
 }
 
-function shopifyAJAXAddToCart(request: ShopifyAJAXCartItem[]) {
-  const items = request.map((item) => {
+function shopifyAJAXAddToCart(
+  request: ShopifyAJAXCartItem | ShopifyAJAXCartItem[],
+) {
+  const rawItems = Array.isArray(request) ? request : [request];
+
+  const items = rawItems.map((item) => {
     return {
-      id: item.id,
+      id: item.variantId,
       quantity: item.quantity,
       properties: item.properties,
     };
   });
 
-  return {
-    items,
-  };
+  return { items };
 }
 
 function shopifyFormAddToCart(request: ShopifyAJAXCartItem[]) {
@@ -192,7 +206,10 @@ function shopifyFormAddToCart(request: ShopifyAJAXCartItem[]) {
 
   for (const item of request) {
     newBody.append("id", item.variantId.toString());
-    newBody.append("quantity", item.quantity?.toString() ?? "1");
+
+    if (item.quantity) {
+      newBody.append("quantity", item.quantity.toString());
+    }
 
     for (const [key, value] of Object.entries(item.properties ?? {})) {
       newBody.append(`properties[${key}]`, value);

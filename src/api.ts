@@ -15,7 +15,7 @@ export async function fetchProductsPreorderState(handle: string) {
 
     trackEvent("integration.product_viewed", {
       product_handle: handle,
-      release_id: body.waitlist?.id ?? null,
+      release_id: body.data.waitlist?.id ?? null,
       source: "api_call",
     }).catch(() => {});
 
@@ -66,7 +66,7 @@ export async function fetchVariantsPreorderState(
 
     trackEvent("integration.sku_selected", {
       sku_external_id: variantId.toString(),
-      release_id: body.waitlist?.id ?? null,
+      release_id: body.data.waitlist?.id ?? null,
       source: "api_call",
     }).catch(() => {});
 

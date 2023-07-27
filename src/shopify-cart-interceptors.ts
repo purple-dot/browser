@@ -45,13 +45,6 @@ async function onAddToCart([input, init]: [
     // Convert the Shopify add to cart request to our Cart API format.
     const newItems = getItemsFromRequest(requestBody);
 
-    for (const item of newItems) {
-      trackEvent("integration.added_to_cart", {
-        variant_id: item.variantId,
-        release_id: item.properties?.["__releaseId"] ?? null,
-      }).catch(() => {});
-    }
-
     // Keep track of if we find anything that needs changing so we can avoid changing things that don't need it.
     let changed = false;
 
@@ -64,6 +57,13 @@ async function onAddToCart([input, init]: [
       } else {
         updatedItems.push(item);
       }
+    }
+
+    for (const item of updatedItems) {
+      trackEvent("integration.added_to_cart", {
+        variant_id: item.variantId,
+        release_id: item.properties?.["__releaseId"] ?? null,
+      }).catch(() => {});
     }
 
     // If we didn't alter anything, just return the original data.

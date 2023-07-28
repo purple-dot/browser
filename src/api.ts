@@ -1,3 +1,4 @@
+import { getConfig } from "./config";
 import { trackEvent } from "./tracking";
 
 export async function fetchProductsPreorderState(handle: string) {
@@ -79,8 +80,9 @@ export async function fetchVariantsPreorderState(
 }
 
 function identifyShop(url: URL) {
-  if (window.PurpleDotConfig?.apiKey) {
-    url.searchParams.set("api_key", window.PurpleDotConfig.apiKey);
+  const apiKey = getConfig()?.apiKey;
+  if (apiKey) {
+    url.searchParams.set("api_key", apiKey);
   } else if (window.Shopify?.shop) {
     url.searchParams.set("shop", window.Shopify.shop);
   }

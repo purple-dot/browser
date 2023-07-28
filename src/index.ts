@@ -1,3 +1,4 @@
+import { setConfig } from "./config";
 import { injectComponentScripts } from "./web-components";
 import { trackEvent, trackPageView } from "./tracking";
 import {
@@ -5,19 +6,14 @@ import {
   onLocationChange,
   onPurpleDotEvent,
 } from "./custom-events";
-import { Cart, CartItem } from "./cart";
 import { ShopifyAJAXCart } from "./shopify-cart";
+import type { Cart, CartItem } from "./cart";
 
-export interface PurpleDotConfig {
-  apiKey: string;
-  cartAdapter?: Cart<CartItem>;
-}
-
-export function init(config: PurpleDotConfig) {
-  window.PurpleDotConfig = {
+export function init(config: { apiKey: string; cartAdapter?: Cart<CartItem> }) {
+  setConfig({
     apiKey: config.apiKey,
     cartAdapter: config.cartAdapter ?? ShopifyAJAXCart,
-  };
+  });
 
   injectComponentScripts();
 }

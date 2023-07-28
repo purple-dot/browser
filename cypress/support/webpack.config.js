@@ -22,4 +22,5 @@ module.exports = {
     extensions: [".ts", ".js"], // Add '.ts' and '.js' to the list of extensions Webpack should resolve
   },
   plugins: [new HtmlWebpackPlugin()],
+  devtool: "source-map",
 };

@@ -1,3 +1,5 @@
+import { getConfig } from "./config";
+
 export type ShipDates = {
   earliest: Date;
   latest: Date;
@@ -32,7 +34,7 @@ export async function cartHasPreorderItem() {
 }
 
 export function getCartAdapter(): Cart<CartItem> {
-  const cart = window.PurpleDotConfig?.cartAdapter;
+  const cart = getConfig()?.cartAdapter;
   if (!cart) {
     throw new Error("@purple-dot/browser not initialised");
   }

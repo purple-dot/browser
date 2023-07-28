@@ -20,18 +20,20 @@ export function init(config: { apiKey: string; cartAdapter?: Cart<CartItem> }) {
   }
 }
 
-onDOMContentLoaded(() => trackPageView().catch(() => {}));
-onLocationChange(() => trackPageView().catch(() => {}));
+if (globalThis.window) {
+  onDOMContentLoaded(() => trackPageView().catch(() => {}));
+  onLocationChange(() => trackPageView().catch(() => {}));
 
-onPurpleDotEvent("CheckoutLoaded", (detail: object) => {
-  trackEvent("checkout_loaded", detail);
-});
-onPurpleDotEvent("PreorderCheckoutStep", (detail: object) => {
-  trackEvent("pre_order_checkout_step", detail).catch(() => {});
-});
-onPurpleDotEvent("PreorderCheckoutSubmitted", (detail: object) => {
-  trackEvent("pre_order_checkout_submitted", detail).catch(() => {});
-});
-onPurpleDotEvent("PreorderCreated", (detail: object) => {
-  trackEvent("pre_order_created", detail).catch(() => {});
-});
+  onPurpleDotEvent("CheckoutLoaded", (detail: object) => {
+    trackEvent("checkout_loaded", detail);
+  });
+  onPurpleDotEvent("PreorderCheckoutStep", (detail: object) => {
+    trackEvent("pre_order_checkout_step", detail).catch(() => {});
+  });
+  onPurpleDotEvent("PreorderCheckoutSubmitted", (detail: object) => {
+    trackEvent("pre_order_checkout_submitted", detail).catch(() => {});
+  });
+  onPurpleDotEvent("PreorderCreated", (detail: object) => {
+    trackEvent("pre_order_created", detail).catch(() => {});
+  });
+}

@@ -15,7 +15,9 @@ export function init(config: { apiKey: string; cartAdapter?: Cart<CartItem> }) {
     cartAdapter: config.cartAdapter ?? ShopifyAJAXCart,
   });
 
-  injectComponentScripts();
+  if (globalThis.window) {
+    injectComponentScripts();
+  }
 }
 
 onDOMContentLoaded(() => trackPageView().catch(() => {}));

@@ -13,7 +13,7 @@ describe("opening a checkout", () => {
     // Wait for the components to be registered
     cy.wait(1000);
 
-    cy.setCookie("cart", "bcc9daa54d4eb89b36df5321dd087ab2");
+    cy.setCookie("cart", "bde6698757ef4133b294aafb1605eba2");
 
     cy.window().then(async (win) => {
       await win.PurpleDot.checkout.open();

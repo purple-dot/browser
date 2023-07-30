@@ -1,7 +1,23 @@
 import { getConfig } from "./config";
 import { trackEvent } from "./tracking";
 
-export async function fetchProductsPreorderState(handle: string) {
+export interface ProductPreorderState {
+  state: NewEndpointPreorderState;
+  waitlist: {
+    id: string;
+    selling_plan_id: string | null;
+    display_dispatch_date: string;
+    payment_plan_descriptions: {
+      long: string;
+      short: string;
+    } | null;
+    units_left: number;
+  } | null;
+}
+
+export async function fetchProductsPreorderState(
+  handle: string,
+): Promise<ProductPreorderState | null> {
   const url = new URL(
     "https://www.purpledotprice.com/api/v1/products/preorder-state",
   );
@@ -24,7 +40,7 @@ export async function fetchProductsPreorderState(handle: string) {
     return body.data;
   }
 
-  return undefined;
+  return null;
 }
 
 export type NewEndpointPreorderState =

@@ -6,7 +6,7 @@ import {
   onLocationChange,
   onPurpleDotEvent,
 } from "./custom-events";
-import { ShopifyAJAXCart } from "./shopify-cart";
+import { ShopifyAJAXCart } from "./shopify-ajax-cart";
 import type { Cart, CartItem } from "./cart";
 
 export function init(config: { apiKey: string; cartAdapter?: Cart<CartItem> }) {

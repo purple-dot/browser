@@ -1,6 +1,6 @@
 import * as PurpleDotMain from "../../src/index";
 import * as checkout from "../../src/checkout";
-import { ShopifyAJAXCart } from "../../src/shopify-cart";
+import { ShopifyAJAXCart } from "../../src/shopify-ajax-cart";
 
 const PurpleDot = {
   ...PurpleDotMain,

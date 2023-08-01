@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
-import { ShopifyAJAXCart } from "../src/shopify-cart";
+import { ShopifyAJAXCart } from "../src/shopify-ajax-cart";
 
 describe("fetch", () => {
   describe("hasPreorderAttributes", () => {

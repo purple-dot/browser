@@ -32,8 +32,8 @@
     "./api": "./dist/api.js",
     "./checkout": "./dist/checkout.js",
     "./cart": "./dist/cart.js",
-    "./shopify-ajax-cart": "./dist/shopify-cart.js",
-    "./shopify-ajax-interceptors": "./dist/shopify-cart-interceptors.js"
+    "./shopify-ajax-cart": "./dist/shopify-ajax-cart.js",
+    "./shopify-ajax-interceptors": "./dist/shopify-ajax-cart-interceptors.js"
   },
   "devDependencies": {
     "@testing-library/dom": "^9.3.1",

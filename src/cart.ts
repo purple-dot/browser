@@ -20,6 +20,7 @@ export interface Cart<T extends CartItem> {
   // Queries
   fetchItems: () => Promise<Required<T>[]>;
   getCartId: () => Promise<string | null>;
+  getCartType: () => string;
 
   // Mutations
   decrementQuantity: (id: string) => Promise<void>;

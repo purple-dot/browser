@@ -91,6 +91,10 @@ export const ShopifyAJAXCart: Cart<ShopifyAJAXCartItem> = {
     const shopifyCartId = cookies.get("cart");
     return shopifyCartId ?? null;
   },
+
+  getCartType() {
+    return "ajax";
+  },
 };
 
 export async function updatePreorderAttributes(

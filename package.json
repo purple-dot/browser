@@ -33,7 +33,8 @@
     "./checkout": "./dist/checkout.js",
     "./cart": "./dist/cart.js",
     "./shopify-ajax-cart": "./dist/shopify-ajax-cart.js",
-    "./shopify-ajax-interceptors": "./dist/shopify-ajax-cart-interceptors.js"
+    "./shopify-ajax-interceptors": "./dist/shopify-ajax-cart-interceptors.js",
+    "./shopify-storefront-cart": "./dist/shopify-storefront-cart.js"
   },
   "devDependencies": {
     "@testing-library/dom": "^9.3.1",

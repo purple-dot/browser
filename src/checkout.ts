@@ -8,8 +8,9 @@ export async function open(args?: { cartId?: string }) {
   return new Promise<void>((resolve) => {
     onceCheckoutScriptLoaded(async () => {
       const cartId = args?.cartId ?? (await getCartAdapter().getCartId());
+      const cartType = getCartAdapter().getCartType();
       // @ts-ignore
-      element.open({ cartId });
+      element.open({ cartId, cartType });
 
       resolve();
     });

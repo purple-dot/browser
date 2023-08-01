@@ -9,10 +9,10 @@ export type ShopifyAJAXCartItem = CartItem & {
   properties?: Record<string, string>;
 };
 
-export const ShopifyAJAXCart: Cart<ShopifyAJAXCartItem> = {
+class ShopifyAJAXCartClass implements Cart<ShopifyAJAXCartItem> {
   hasPreorderAttributes(item: ShopifyAJAXCartItem): boolean {
     return !!item.properties?.["__releaseId"];
-  },
+  }
 
   addPreorderAttributes(item: ShopifyAJAXCartItem, attrs: PreorderAttributes) {
     return {
@@ -25,7 +25,7 @@ export const ShopifyAJAXCart: Cart<ShopifyAJAXCartItem> = {
         "Purple Dot Pre-order": attrs.displayShipDates,
       },
     };
-  },
+  }
 
   removePreorderAttributes(item: ShopifyAJAXCartItem) {
     return {
@@ -38,7 +38,7 @@ export const ShopifyAJAXCart: Cart<ShopifyAJAXCartItem> = {
         ),
       ),
     };
-  },
+  }
 
   async fetchItems() {
     // TODO: Add the locale to the URL
@@ -52,7 +52,7 @@ export const ShopifyAJAXCart: Cart<ShopifyAJAXCartItem> = {
         properties: item.properties,
       };
     });
-  },
+  }
 
   async decrementQuantity(id: string) {
     const cartResponse = await fetch("/cart.js");
@@ -77,25 +77,27 @@ export const ShopifyAJAXCart: Cart<ShopifyAJAXCartItem> = {
         }),
       });
     }
-  },
+  }
 
   async clear() {
     await fetch("/cart/clear.js", { method: "POST" });
-  },
+  }
 
   async navigateToCheckout() {
     window.location.href = "/checkout";
-  },
+  }
 
   async getCartId() {
     const shopifyCartId = cookies.get("cart");
     return shopifyCartId ?? null;
-  },
+  }
 
   getCartType() {
     return "ajax";
-  },
-};
+  }
+}
+
+export const ShopifyAJAXCart = new ShopifyAJAXCartClass();
 
 export async function updatePreorderAttributes(
   item: ShopifyAJAXCartItem,

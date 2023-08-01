@@ -30,7 +30,7 @@ export interface Cart<T extends CartItem> {
 
 export async function cartHasPreorderItem(cartItems?: CartItem[]) {
   const cart = getCartAdapter();
-  const items = cartItems ?? await cart.fetchItems();
+  const items = cartItems ?? (await cart.fetchItems());
   return items.some((i) => cart.hasPreorderAttributes(i));
 }
 

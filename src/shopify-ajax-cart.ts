@@ -4,7 +4,7 @@ import { Cart, CartItem, PreorderAttributes } from "./cart";
 import { JSONObject } from "./interceptors";
 
 export type ShopifyAJAXCartItem = CartItem & {
-  id?: string;
+  variantId?: string;
   quantity?: number;
   properties?: Record<string, string>;
 };
@@ -96,24 +96,26 @@ export const ShopifyAJAXCart: Cart<ShopifyAJAXCartItem> = {
 export async function updatePreorderAttributes(
   item: ShopifyAJAXCartItem,
 ): Promise<ShopifyAJAXCartItem | null> {
-  const variantId = parseFloat(item.variantId);
-  const preorderState = await fetchVariantsPreorderState(variantId);
+  if (item.variantId) {
+    const variantId = parseFloat(item.variantId);
+    const preorderState = await fetchVariantsPreorderState(variantId);
 
-  if (preorderState == null) {
-    return null;
-  }
+    if (preorderState == null) {
+      return null;
+    }
 
-  if (preorderState.state === "ON_PREORDER" && preorderState.waitlist) {
-    const attributes = {
-      releaseId: preorderState.waitlist.id,
-      displayShipDates: preorderState.waitlist.display_dispatch_date,
-    };
+    if (preorderState.state === "ON_PREORDER" && preorderState.waitlist) {
+      const attributes = {
+        releaseId: preorderState.waitlist.id,
+        displayShipDates: preorderState.waitlist.display_dispatch_date,
+      };
 
-    return ShopifyAJAXCart.addPreorderAttributes(item, attributes);
-  }
+      return ShopifyAJAXCart.addPreorderAttributes(item, attributes);
+    }
 
-  if (ShopifyAJAXCart.hasPreorderAttributes(item)) {
-    return ShopifyAJAXCart.removePreorderAttributes(item);
+    if (ShopifyAJAXCart.hasPreorderAttributes(item)) {
+      return ShopifyAJAXCart.removePreorderAttributes(item);
+    }
   }
 
   return null;

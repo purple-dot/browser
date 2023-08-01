@@ -205,7 +205,9 @@ function shopifyFormAddToCart(request: ShopifyAJAXCartItem[]) {
   const newBody = new URLSearchParams();
 
   for (const item of request) {
-    newBody.append("id", item.variantId.toString());
+    if (item.variantId) {
+      newBody.append("id", item.variantId.toString());
+    }
 
     if (item.quantity) {
       newBody.append("quantity", item.quantity.toString());

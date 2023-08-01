@@ -10,7 +10,7 @@ export type PreorderAttributes = {
   displayShipDates: string;
 };
 
-export type CartItem = { variantId: string };
+export type CartItem = { id?: string };
 
 export interface Cart<T extends CartItem> {
   hasPreorderAttributes: (item: T) => boolean;

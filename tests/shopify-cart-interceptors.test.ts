@@ -2,7 +2,7 @@
 
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
-import { ShopifyAJAXCartAddInterceptor } from "../src/shopify-cart-interceptors";
+import { ShopifyAJAXCartAddInterceptor } from "../src/shopify-ajax-cart-interceptors";
 
 const jsonHeader = { "Content-Type": "application/json" };
 const formHeader = { "Content-Type": "application/x-www-form-urlencoded" };

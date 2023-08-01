@@ -10,7 +10,7 @@ import {
   ShopifyAJAXCart,
   ShopifyAJAXCartItem,
   updatePreorderAttributes,
-} from "./shopify-cart";
+} from "./shopify-ajax-cart";
 import { trackEvent } from "./tracking";
 
 function shouldIntercept(input: string | URL) {

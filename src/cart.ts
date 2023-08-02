@@ -20,14 +20,14 @@ export interface Cart<T extends CartItem> {
   removePreorderAttributes: (item: T) => T;
 
   // Queries
-  fetchItems: () => Promise<Required<T>[]>;
+  fetchItems: (cartId?: string) => Promise<Required<T>[]>;
   getCartId: () => Promise<string | null>;
   getCartType: () => string;
 
   // Mutations
-  decrementQuantity: (id: string) => Promise<void>;
-  clear: () => Promise<void>;
-  navigateToCheckout: () => Promise<void>;
+  decrementQuantity: (id: string, cartId?: string) => Promise<void>;
+  clear: (cartId?: string) => Promise<void>;
+  navigateToCheckout: (cartId?: string) => Promise<void>;
 }
 
 export async function cartHasPreorderItem(cartItems?: CartItem[]) {

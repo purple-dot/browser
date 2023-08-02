@@ -72,7 +72,7 @@ export class ShopifyStorefrontCart implements Cart<ShopifyStorefrontCartItem> {
     );
   }
 
-  async decrementQuantity(cartId: string, lineId?: string) {
+  async decrementQuantity(lineId: string, cartId?: string) {
     const items = await this.fetchItems(cartId);
     const quantity = items.find((item) => item.id === lineId)?.quantity ?? 1;
 

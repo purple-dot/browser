@@ -72,11 +72,18 @@ export class ShopifyStorefrontCart implements Cart<ShopifyStorefrontCartItem> {
     );
   }
 
-  async decrementQuantity(lineId: string, cartId?: string) {
+  async decrementQuantity(variantId: string, cartId?: string) {
     const items = await this.fetchItems(cartId);
-    const quantity = items.find((item) => item.id === lineId)?.quantity ?? 1;
+    const line = items.find(
+      (item) => idFromGid(item.merchandise.id) === variantId,
+    );
+    if (!line) {
+      return;
+    }
+    const quantity = line.quantity - 1;
+    const lineId = line.id;
 
-    const res = await this.graphql({
+    await this.graphql({
       query: `
         mutation cartLinesRemove($cartId: ID!, $line: CartLineUpdateInput!) {
           cartLinesUpdate(
@@ -99,7 +106,7 @@ export class ShopifyStorefrontCart implements Cart<ShopifyStorefrontCartItem> {
         cartId,
         line: {
           id: lineId,
-          quantity: quantity - 1,
+          quantity,
         },
       },
     });
@@ -169,4 +176,8 @@ export class ShopifyStorefrontCart implements Cart<ShopifyStorefrontCartItem> {
     });
     return await res.json();
   }
+}
+
+function idFromGid(gid: string) {
+  return gid.split("/")[4];
 }

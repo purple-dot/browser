@@ -12,7 +12,7 @@ import type { Cart, CartItem } from "./cart";
 export function init(config: { apiKey: string; cartAdapter?: Cart<CartItem> }) {
   setConfig({
     apiKey: config.apiKey,
-    cartAdapter: config.cartAdapter ?? ShopifyAJAXCart,
+    cartAdapter: config.cartAdapter ?? new ShopifyAJAXCart(),
   });
 
   if (globalThis.window) {

@@ -25,23 +25,24 @@ jobs:
           root: ~/repo
           paths: .
 
-  lint: 
+  lint:
     executor: node
     resource_class: medium
     steps:
       - attach_workspace:
-          at: ~/repo 
+          at: ~/repo
       - run: yarn lint
-    
-  test: 
+      - run: yarn typecheck
+
+  test:
     executor: node
     resource_class: medium
     steps:
       - attach_workspace:
-          at: ~/repo 
+          at: ~/repo
       - run: yarn test
-      - run: 
-          command: yarn start:test-http-server 
+      - run:
+          command: yarn start:test-http-server
           background: true
       - run: yarn run build:test
       - run: yarn cypress run
@@ -52,7 +53,7 @@ jobs:
           destination: cypress-videos
       - store_artifacts:
           path: /root/repo/cypress/screenshots
-          destination: cypress-screenshots 
+          destination: cypress-screenshots
 
   publish:
     executor: node
@@ -75,7 +76,7 @@ workflows:
       - lint:
           requires:
             - build
-      - test: 
+      - test:
           requires:
             - build
       - publish:

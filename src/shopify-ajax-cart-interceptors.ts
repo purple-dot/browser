@@ -2,7 +2,6 @@ import {
   BodyData,
   JSONObject,
   RequestInterceptor,
-  makeFetchRequestBody,
   parseFetchRequestBody,
   shopifyUrlStartsWith,
 } from "./interceptors";
@@ -136,6 +135,7 @@ function getItemsFromRequest(
     if (Array.isArray(items)) {
       for (const item of items) {
         const newItem: ShopifyAJAXCartItem = {
+          id: item.id,
           variantId: `${item.id}`,
           properties: item.properties,
         };
@@ -164,6 +164,7 @@ function getItemsFromRequest(
 
   const pdRequests: ShopifyAJAXCartItem[] = [
     {
+      id: variantId,
       variantId,
       quantity,
       properties,
@@ -247,7 +248,7 @@ function applyURLEncodedAddToCart(
   }
 
   // Disable the checkout redirect if this is a preorder
-  if (ShopifyAJAXCart.hasPreorderAttributes(item)) {
+  if (new ShopifyAJAXCart().hasPreorderAttributes(item)) {
     target.delete("checkout");
   }
 }

@@ -6,7 +6,7 @@ import { ShopifyAJAXCart } from '@purple-dot/browser/shopify-ajax-cart';
 
 init({
   apiKey: 'xxx',
-  cartAdapter: ShopifyAJAXCart,
+  cartAdapter: new ShopifyAJAXCart(),
 });
 ```
 

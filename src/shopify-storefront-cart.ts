@@ -1,19 +1,18 @@
 import { Cart, CartItem, PreorderAttributes } from "./cart";
 
-export type ShopifyStorefrontCartItem = CartItem & {
-  id: string;
-  quantity: number;
-  attributes: { key: string; value: string }[];
-  merchandise: {
+export interface ShopifyStorefrontCartItem extends CartItem {
+  quantity?: number;
+  attributes?: { key: string; value: string }[];
+  merchandise?: {
     id: string;
   };
-};
+}
 
 export class ShopifyStorefrontCart implements Cart<ShopifyStorefrontCartItem> {
   constructor(private origin: string, private accessToken: string) {}
 
   hasPreorderAttributes(item: ShopifyStorefrontCartItem): boolean {
-    return item.attributes.some(({ key }) => key === "__releaseId");
+    return item.attributes?.some(({ key }) => key === "__releaseId") ?? false;
   }
 
   addPreorderAttributes(
@@ -23,7 +22,7 @@ export class ShopifyStorefrontCart implements Cart<ShopifyStorefrontCartItem> {
     return {
       ...item,
       attributes: [
-        ...item.attributes,
+        ...(item.attributes ?? []),
         { key: "__releaseId", value: attrs.releaseId },
         { key: "Purple Dot Pre-order", value: attrs.displayShipDates },
       ],
@@ -33,13 +32,15 @@ export class ShopifyStorefrontCart implements Cart<ShopifyStorefrontCartItem> {
   removePreorderAttributes(item: ShopifyStorefrontCartItem) {
     return {
       ...item,
-      attributes: item.attributes.filter(
+      attributes: item.attributes?.filter(
         ({ key }) => key !== "__releaseId" && key !== "Purple Dot Pre-order",
       ),
     };
   }
 
-  async fetchItems(cartId?: string): Promise<ShopifyStorefrontCartItem[]> {
+  async fetchItems(
+    cartId?: string,
+  ): Promise<Required<ShopifyStorefrontCartItem>[]> {
     const body = await this.graphql({
       query: `query cart($cartId: ID!) {
         cart(id: $cartId) {

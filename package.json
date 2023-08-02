@@ -3,10 +3,11 @@
   "name": "@purple-dot/browser",
   "description": "Purple Dot Browser SDK",
   "license": "Apache-2.0",
-  "version": "0.0.23",
+  "version": "0.0.24",
   "scripts": {
     "build": "tsc",
     "lint": "rome ci src/ tests/ cypress/",
+    "typecheck": "tsc --noEmit && tsc --noEmit --project tsconfig.tests.json",
     "lint:fix": "rome check --apply-unsafe src/ tests/ cypress/ && rome format --write src/ tests/ cypress/",
     "format": "rome check --apply-unsafe src/ tests/ cypress/ && rome format --write src/ tests/ cypress/",
     "test": "vitest",

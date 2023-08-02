@@ -6,7 +6,8 @@ import { beforeEach, describe, expect, test, vi } from "vitest";
 import { FetchParams, RequestInterceptor } from "../src/interceptors";
 
 describe("fetch", () => {
-  let fetchSpy;
+  // rome-ignore lint/suspicious/noExplicitAny: tests
+  let fetchSpy: any;
 
   const handler = vi.fn((request: FetchParams) => Promise.resolve(request));
 

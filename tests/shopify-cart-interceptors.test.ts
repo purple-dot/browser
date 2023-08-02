@@ -8,7 +8,8 @@ const jsonHeader = { "Content-Type": "application/json" };
 const formHeader = { "Content-Type": "application/x-www-form-urlencoded" };
 
 describe("ShopifyAddToCartInterceptor", () => {
-  let fetchSpy;
+  // rome-ignore lint/suspicious/noExplicitAny: tests
+  let fetchSpy: any;
 
   beforeEach(() => {
     window.fetch = fetchSpy = vi.fn(() => Promise.resolve(new Response()));
@@ -44,7 +45,7 @@ describe("ShopifyAddToCartInterceptor", () => {
     });
 
     test("on preorder", async () => {
-      fetchSpy.mockImplementation(async (input: string, init) => {
+      fetchSpy.mockImplementation(async (input: string) => {
         if (input.endsWith("/api/v1/variants/preorder-state?variant_id=1")) {
           return new Response(
             JSON.stringify({
@@ -92,7 +93,7 @@ describe("ShopifyAddToCartInterceptor", () => {
     });
 
     test("single item add on preorder", async () => {
-      fetchSpy.mockImplementation(async (input: string, init) => {
+      fetchSpy.mockImplementation(async (input: string) => {
         if (input.endsWith("/api/v1/variants/preorder-state?variant_id=1")) {
           return new Response(
             JSON.stringify({

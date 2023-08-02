@@ -6,7 +6,7 @@ describe("opening a checkout", () => {
     cy.window().then((win) => {
       win.PurpleDot.init({
         apiKey: "b351faa2-8693-4c09-b814-759beed90d0b",
-        cartAdapter: win.PurpleDot.ShopifyAJAXCart,
+        cartAdapter: new win.PurpleDot.ShopifyAJAXCart(),
       });
     });
 

@@ -117,7 +117,7 @@ export class ShopifyStorefrontCart implements Cart<ShopifyStorefrontCartItem> {
     const lineIds = items.map((item) => item.id);
     await this.graphql({
       query: `
-        mutation cartLinesRemove($cartId: ID!, $lineIds: [ID!]) {
+        mutation cartLinesRemove($cartId: ID!, $lineIds: [ID!]!) {
           cartLinesRemove(
             cartId: $cartId,
             lineIds: $lineIds

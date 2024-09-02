@@ -52,9 +52,13 @@ function getDeviceIdSessionStorage() {
   return SessionStorage.getItem(COOKIE_NAME);
 }
 
-const deviceIdMem = uuid();
+let deviceIdMem: string;
 
 function getDeviceIdMemory() {
+  if (!deviceIdMem) {
+    deviceIdMem = uuid();
+  }
+
   return deviceIdMem;
 }
 

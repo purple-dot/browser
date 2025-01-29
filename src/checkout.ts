@@ -28,12 +28,7 @@ export async function openExpressCheckout(args: {
   quantity: number;
   templatePaymentPlanId?: string;
 }) {
-  if (document.querySelector("purple-dot-checkout")) {
-    return;
-  }
-
-  const element = document.createElement("purple-dot-checkout");
-  document.body.appendChild(element);
+  const element = getOrCreateCheckoutElement();
 
   return new Promise<void>((resolve) => {
     onceCheckoutScriptLoaded(async () => {
@@ -43,4 +38,15 @@ export async function openExpressCheckout(args: {
       resolve();
     });
   });
+}
+
+function getOrCreateCheckoutElement() {
+  let element = document.querySelector("purple-dot-checkout");
+
+  if (!element) {
+    element = document.createElement("purple-dot-checkout");
+    document.body.appendChild(element);
+  }
+
+  return element;
 }

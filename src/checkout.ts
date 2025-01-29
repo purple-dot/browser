@@ -21,7 +21,7 @@ export async function open(args?: { cartId?: string }) {
   });
 }
 
-export async function expressCheckout(args: {
+export async function openExpressCheckout(args: {
   variantId: string;
   releaseId: string;
   currency: string;

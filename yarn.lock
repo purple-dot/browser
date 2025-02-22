@@ -377,7 +377,7 @@ __metadata:
     "@types/uuid": ^9.0.2
     "@vitest/coverage-v8": ^0.33.0
     cypress: ^12.17.1
-    happy-dom: ^10.5.2
+    happy-dom: ^15.10.2
     html-webpack-plugin: ^5.5.3
     js-cookie: ^3.0.5
     jsdom: 22.1.0
@@ -1584,13 +1584,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"css.escape@npm:^1.5.1":
-  version: 1.5.1
-  resolution: "css.escape@npm:1.5.1"
-  checksum: f6d38088d870a961794a2580b2b2af1027731bb43261cfdce14f19238a88664b351cc8978abc20f06cc6bbde725699dec8deb6fe9816b139fc3f2af28719e774
-  languageName: node
-  linkType: hard
-
 "cssstyle@npm:^3.0.0":
   version: 3.0.0
   resolution: "cssstyle@npm:3.0.0"
@@ -2497,17 +2490,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"happy-dom@npm:^10.5.2":
-  version: 10.5.2
-  resolution: "happy-dom@npm:10.5.2"
+"happy-dom@npm:^15.10.2":
+  version: 15.11.7
+  resolution: "happy-dom@npm:15.11.7"
   dependencies:
-    css.escape: ^1.5.1
     entities: ^4.5.0
-    iconv-lite: ^0.6.3
     webidl-conversions: ^7.0.0
-    whatwg-encoding: ^2.0.0
     whatwg-mimetype: ^3.0.0
-  checksum: 5fa61c2367c7396da9e379e1b091d666dffa16336cfe95c058af3e3d7ada45a5c68746cee6cba524dc15a1bea6a7cdcd235be0e06f4f44ac0627ca0c08edf59b
+  checksum: 8651ea68e6fd3ae1d0cd5076f6b172ae30a51b48503ccd139fa1d556678e918679dd4b000050f2b7a3091f706d85c514aa08a6208c0ddb113dba351653456429
   languageName: node
   linkType: hard
 
@@ -2704,7 +2694,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"iconv-lite@npm:0.6.3, iconv-lite@npm:^0.6.2, iconv-lite@npm:^0.6.3":
+"iconv-lite@npm:0.6.3, iconv-lite@npm:^0.6.2":
   version: 0.6.3
   resolution: "iconv-lite@npm:0.6.3"
   dependencies:

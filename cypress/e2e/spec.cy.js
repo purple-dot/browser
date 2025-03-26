@@ -3,7 +3,7 @@
 // Then we could use that dummy cart ID here, and open a checkout for that dummy cart
 // This would allow us to test the checkout flow without using a real Shopify store
 describe("opening a checkout", () => {
-  it("can open a checkout for the Demo store", () => {
+  it("can open a checkout for the Purple Dot Test store", () => {
     cy.visit("http://127.0.0.1:8080/dist/index");
     cy.window().should("have.attr", "PurpleDot");
 

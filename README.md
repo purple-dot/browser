@@ -2,7 +2,7 @@
 
 This package is a toolbox for connecting your headless ecommerce application to Purple Dot. It provides all the features necessary for your integration, including APIs, cart & checkout functionality, and interceptors.
 
-Please read [http://bit.ly/47JtIk0](http://bit.ly/47JtIk0) to learn how to integrate Purple Dot into your headless Shopify storefront.
+Please see [related documentation](http://bit.ly/47JtIk0) to learn more.
 
 #
 

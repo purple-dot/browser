@@ -1,11 +1,8 @@
-import type { Cart, CartItem } from "./cart";
+import { PurpleDotConfig } from "./config";
 
-export declare global {
+declare global {
 	interface Window {
-		PurpleDotConfig?: {
-			apiKey: string;
-			cartAdapter: Cart<CartItem>;
-		};
+		PurpleDotConfig?: PurpleDotConfig;
 
 		Shopify?: {
 			shop?: string;

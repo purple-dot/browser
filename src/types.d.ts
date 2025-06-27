@@ -1,17 +1,17 @@
 import type { Cart, CartItem } from "./cart";
 
 export declare global {
-  interface Window {
-    PurpleDotConfig?: {
-      apiKey: string;
-      cartAdapter: Cart<CartItem>;
-    };
+	interface Window {
+		PurpleDotConfig?: {
+			apiKey: string;
+			cartAdapter: Cart<CartItem>;
+		};
 
-    Shopify?: {
-      shop?: string;
-      routes?: {
-        root?: string;
-      };
-    };
-  }
+		Shopify?: {
+			shop?: string;
+			routes?: {
+				root?: string;
+			};
+		};
+	}
 }

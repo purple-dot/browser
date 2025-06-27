@@ -1,52 +1,52 @@
-import { onceCheckoutScriptLoaded } from "./web-components";
 import { getCartAdapter } from "./cart";
+import { onceCheckoutScriptLoaded } from "./web-components";
 
 export async function open(args?: { cartId?: string }) {
-  if (document.querySelector("purple-dot-checkout")) {
-    return;
-  }
+	if (document.querySelector("purple-dot-checkout")) {
+		return;
+	}
 
-  const element = document.createElement("purple-dot-checkout");
-  document.body.appendChild(element);
+	const element = document.createElement("purple-dot-checkout");
+	document.body.appendChild(element);
 
-  return new Promise<void>((resolve) => {
-    onceCheckoutScriptLoaded(async () => {
-      const cartId = args?.cartId ?? (await getCartAdapter().getCartId());
-      const cartType = getCartAdapter().getCartType();
-      // @ts-ignore
-      element.open({ cartId, cartType });
+	return new Promise<void>((resolve) => {
+		onceCheckoutScriptLoaded(async () => {
+			const cartId = args?.cartId ?? (await getCartAdapter().getCartId());
+			const cartType = getCartAdapter().getCartType();
+			// @ts-ignore
+			element.open({ cartId, cartType });
 
-      resolve();
-    });
-  });
+			resolve();
+		});
+	});
 }
 
 export async function openExpressCheckout(args: {
-  variantId: string;
-  releaseId: string;
-  currency: string;
-  quantity: number;
-  templatePaymentPlanId?: string;
+	variantId: string;
+	releaseId: string;
+	currency: string;
+	quantity: number;
+	templatePaymentPlanId?: string;
 }) {
-  const element = getOrCreateCheckoutElement();
+	const element = getOrCreateCheckoutElement();
 
-  return new Promise<void>((resolve) => {
-    onceCheckoutScriptLoaded(async () => {
-      // @ts-ignore
-      element.expressCheckout(args);
+	return new Promise<void>((resolve) => {
+		onceCheckoutScriptLoaded(async () => {
+			// @ts-ignore
+			element.expressCheckout(args);
 
-      resolve();
-    });
-  });
+			resolve();
+		});
+	});
 }
 
 function getOrCreateCheckoutElement() {
-  let element = document.querySelector("purple-dot-checkout");
+	let element = document.querySelector("purple-dot-checkout");
 
-  if (!element) {
-    element = document.createElement("purple-dot-checkout");
-    document.body.appendChild(element);
-  }
+	if (!element) {
+		element = document.createElement("purple-dot-checkout");
+		document.body.appendChild(element);
+	}
 
-  return element;
+	return element;
 }

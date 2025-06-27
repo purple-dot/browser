@@ -1,37 +1,37 @@
 // @vitest-environment happy-dom
 
-import { describe, expect, test, vi } from "vitest";
 import { waitFor } from "@testing-library/dom";
+import { describe, expect, test, vi } from "vitest";
 
 import {
-  injectComponentScripts,
-  onceCheckoutScriptLoaded,
+	injectComponentScripts,
+	onceCheckoutScriptLoaded,
 } from "../src/web-components";
 
 describe("onceCheckoutScriptLoaded", () => {
-  test("fires the callback once the script is loaded", async () => {
-    const callback = vi.fn();
-    onceCheckoutScriptLoaded(callback);
+	test("fires the callback once the script is loaded", async () => {
+		const callback = vi.fn();
+		onceCheckoutScriptLoaded(callback);
 
-    injectComponentScripts();
+		injectComponentScripts();
 
-    return waitFor(() => {
-      expect(callback).toHaveBeenCalled();
-    });
-  });
+		return waitFor(() => {
+			expect(callback).toHaveBeenCalled();
+		});
+	});
 
-  test("fires the callback immediately if the script is already loaded", async () => {
-    const callback = vi.fn();
-    onceCheckoutScriptLoaded(callback);
+	test("fires the callback immediately if the script is already loaded", async () => {
+		const callback = vi.fn();
+		onceCheckoutScriptLoaded(callback);
 
-    injectComponentScripts();
+		injectComponentScripts();
 
-    await waitFor(() => {
-      expect(callback).toHaveBeenCalled();
-    });
+		await waitFor(() => {
+			expect(callback).toHaveBeenCalled();
+		});
 
-    const anotherCallback = vi.fn();
-    onceCheckoutScriptLoaded(anotherCallback);
-    expect(anotherCallback).toHaveBeenCalled();
-  });
+		const anotherCallback = vi.fn();
+		onceCheckoutScriptLoaded(anotherCallback);
+		expect(anotherCallback).toHaveBeenCalled();
+	});
 });

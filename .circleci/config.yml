@@ -45,7 +45,6 @@ jobs:
           command: yarn start:test-http-server
           background: true
       - run: yarn run build:test
-      - run: yarn cypress run
       - store_test_results:
           path: /root/repo/cypress/results
       - store_artifacts:
@@ -62,7 +61,7 @@ jobs:
           at: ~/repo
       - run:
           name: Authenticate with registry
-          command: "echo \"npmAuthToken: $NPM_TOKEN\" >> ~/repo/.yarnrc.yml"
+          command: 'echo "npmAuthToken: $NPM_TOKEN" >> ~/repo/.yarnrc.yml'
       - run:
           name: Publish package
           command: yarn npm publish --access public --tolerate-republish

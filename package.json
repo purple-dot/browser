@@ -6,10 +6,10 @@
   "version": "0.0.30",
   "scripts": {
     "build": "tsc",
-    "lint": "rome ci src/ tests/ cypress/",
+    "lint": "biome ci src/ tests/ cypress/",
     "typecheck": "tsc --noEmit && tsc --noEmit --project tsconfig.tests.json",
-    "lint:fix": "rome check --apply-unsafe src/ tests/ cypress/ && rome format --write src/ tests/ cypress/",
-    "format": "rome check --apply-unsafe src/ tests/ cypress/ && rome format --write src/ tests/ cypress/",
+    "lint:fix": "biome check --write --unsafe src/ tests/ cypress/",
+    "format": "biome check --write --unsafe src/ tests/ cypress/",
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "start:test-http-server": "cd cypress/support && yarn dlx http-server . -p 8080",
@@ -38,6 +38,7 @@
     "./shopify-storefront-cart": "./dist/shopify-storefront-cart.js"
   },
   "devDependencies": {
+    "@biomejs/biome ": "^2.0.6",
     "@testing-library/dom": "^9.3.1",
     "@tsconfig/recommended": "^1.0.2",
     "@types/js-cookie": "^3.0.3",
@@ -47,7 +48,6 @@
     "happy-dom": "^15.10.2",
     "html-webpack-plugin": "^5.5.3",
     "jsdom": "22.1.0",
-    "rome": "12.1.3-nightly.f65b0d9",
     "ts-loader": "^9.4.4",
     "typescript": "^5.1.6",
     "vitest": "^0.33.0",

@@ -6,16 +6,17 @@
   "version": "0.0.30",
   "scripts": {
     "build": "tsc",
+    "prepare": "tsc",
     "lint": "biome ci src/ tests/ cypress/",
     "typecheck": "tsc --noEmit && tsc --noEmit --project tsconfig.tests.json",
     "lint:fix": "biome check --write --unsafe src/ tests/ cypress/",
     "format": "biome check --write --unsafe src/ tests/ cypress/",
     "test": "vitest",
     "coverage": "vitest run --coverage",
-    "start:test-http-server": "cd cypress/support && yarn dlx http-server . -p 8080",
+    "start:test-http-server": "cd cypress/support && pnpm exec http-server . -p 8080",
     "build:test": "webpack --config cypress/support/webpack.config.js",
-    "dev": "webpack --config cypress/support/webpack.config.js --watch",
-    "prepare": "rm -r dist/ && yarn build"
+    "dev": "webpack --config cypress/support/webpack.config.js --watch"
+
   },
   "repository": {
     "type": "git",
@@ -38,7 +39,7 @@
     "./shopify-storefront-cart": "./dist/shopify-storefront-cart.js"
   },
   "devDependencies": {
-    "@biomejs/biome ": "^2.0.6",
+    "@biomejs/biome": "^2.0.6",
     "@testing-library/dom": "^9.3.1",
     "@tsconfig/recommended": "^1.0.2",
     "@types/js-cookie": "^3.0.3",
@@ -49,13 +50,14 @@
     "html-webpack-plugin": "^5.5.3",
     "jsdom": "22.1.0",
     "ts-loader": "^9.4.4",
+    "http-server": "^14.1.1",
     "typescript": "^5.1.6",
     "vitest": "^0.33.0",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4",
     "whatwg-fetch": "^3.6.2"
   },
-  "packageManager": "yarn@3.6.1",
+  "packageManager": "pnpm@10.12.4",
   "dependencies": {
     "js-cookie": "^3.0.5",
     "uuid": "^9.0.0"

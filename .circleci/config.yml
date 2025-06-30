@@ -1,13 +1,13 @@
 version: 2.1
 orbs:
   docker: circleci/docker@2.1.1
+  node: circleci/node@7.1.0
 
 executors:
   node:
     docker: &node_image
       - image: cypress/browsers:node18.12.0-chrome107
         environment:
-          ## this enables colors in the output
           TERM: xterm
           CYPRESS_CACHE_FOLDER: ~/repo/.cypress
     working_directory: ~/repo
@@ -19,8 +19,10 @@ jobs:
     resource_class: medium
     steps:
       - checkout
-      - run: yarn install
-      - run: yarn build
+      - node/install:
+          install-pnpm: true
+      - run: pnpm install
+      - run: pnpm run build
       - persist_to_workspace:
           root: ~/repo
           paths: .
@@ -31,8 +33,10 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/repo
-      - run: yarn lint
-      - run: yarn typecheck
+      - node/install:
+          install-pnpm: true
+      - run: pnpm run lint
+      - run: pnpm run typecheck
 
   test:
     executor: node
@@ -40,11 +44,13 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/repo
-      - run: yarn test
+      - node/install:
+          install-pnpm: true
+      - run: pnpm run test
       - run:
-          command: yarn start:test-http-server
+          command: pnpm run start:test-http-server
           background: true
-      - run: yarn run build:test
+      - run: pnpm run build:test
       - store_test_results:
           path: /root/repo/cypress/results
       - store_artifacts:
@@ -59,12 +65,11 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/repo
-      - run:
-          name: Authenticate with registry
-          command: 'echo "npmAuthToken: $NPM_TOKEN" >> ~/repo/.yarnrc.yml'
+      - node/install:
+          install-pnpm: true
       - run:
           name: Publish package
-          command: yarn npm publish --access public --tolerate-republish
+          command: pnpm publish --access public --tolerate-republish
 
 workflows:
   version: 2

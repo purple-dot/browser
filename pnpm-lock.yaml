@@ -57,6 +57,9 @@ importers:
       vitest:
         specifier: ^0.33.0
         version: 0.33.0(happy-dom@15.11.7)(jsdom@22.1.0)(terser@5.43.1)
+      vitest-fetch-mock:
+        specifier: ^0.4.5
+        version: 0.4.5(vitest@0.33.0(happy-dom@15.11.7)(jsdom@22.1.0)(terser@5.43.1))
       webpack:
         specifier: ^5.88.2
         version: 5.99.9(webpack-cli@5.1.4)
@@ -2039,6 +2042,12 @@ packages:
         optional: true
       terser:
         optional: true
+
+  vitest-fetch-mock@0.4.5:
+    resolution: {integrity: sha512-nhWdCQIGtaSEUVl96pMm0WggyDGPDv5FUy/Q9Hx3cs2RGmh3Q/uRsLClGbdG3kXBkJ3br5yTUjB2MeW25TwdOA==, tarball: https://registry.npmjs.org/vitest-fetch-mock/-/vitest-fetch-mock-0.4.5.tgz}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      vitest: '>=2.0.0'
 
   vitest@0.33.0:
     resolution: {integrity: sha512-1CxaugJ50xskkQ0e969R/hW47za4YXDUfWJDxip1hwbnhUjYolpfUn2AMOulqG/Dtd9WYAtkHmM/m3yKVrEejQ==, tarball: https://registry.npmjs.org/vitest/-/vitest-0.33.0.tgz}
@@ -4215,6 +4224,10 @@ snapshots:
       '@types/node': 24.0.4
       fsevents: 2.3.3
       terser: 5.43.1
+
+  vitest-fetch-mock@0.4.5(vitest@0.33.0(happy-dom@15.11.7)(jsdom@22.1.0)(terser@5.43.1)):
+    dependencies:
+      vitest: 0.33.0(happy-dom@15.11.7)(jsdom@22.1.0)(terser@5.43.1)
 
   vitest@0.33.0(happy-dom@15.11.7)(jsdom@22.1.0)(terser@5.43.1):
     dependencies:

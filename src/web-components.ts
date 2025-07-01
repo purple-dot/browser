@@ -1,7 +1,19 @@
 export function injectComponentScripts() {
-	injectScriptOnce(makeLearnMoreScript());
-	injectScriptOnce(makeCheckoutScript());
-	injectScriptOnce(makeSelfServiceScript());
+	const webComponents = [
+		"learn-more",
+		"checkout",
+		"self-service",
+		"separate-bag",
+	];
+
+	webComponents.forEach((component) => {
+		injectScriptOnce(
+			makeScriptTag({
+				id: `pd-${component}-script`,
+				src: `https://www.purpledotprice.com/api/v1/${component}.js`,
+			}),
+		);
+	});
 }
 
 type Callback = () => void;
@@ -40,27 +52,6 @@ function injectScriptOnce(el: HTMLScriptElement) {
 		el.addEventListener("load", onScriptLoaded(el));
 		document.head.append(el);
 	}
-}
-
-function makeLearnMoreScript() {
-	return makeScriptTag({
-		id: "pd-learn-more-script",
-		src: "https://www.purpledotprice.com/api/v1/learn-more.js",
-	});
-}
-
-function makeCheckoutScript() {
-	return makeScriptTag({
-		id: "pd-checkout-script",
-		src: "https://www.purpledotprice.com/api/v1/checkout.js",
-	});
-}
-
-function makeSelfServiceScript() {
-	return makeScriptTag({
-		id: "pd-self-service-script",
-		src: "https://www.purpledotprice.com/api/v1/self-service.js",
-	});
 }
 
 function makeScriptTag({ id, src }: { id: string; src: string }) {

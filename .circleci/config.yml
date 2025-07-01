@@ -69,7 +69,7 @@ jobs:
           install-pnpm: true
       - run:
           name: Publish package
-          command: pnpm publish --access public --tolerate-republish
+          command: pnpm publish --access public
 
 workflows:
   version: 2

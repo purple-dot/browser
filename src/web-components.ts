@@ -2,6 +2,7 @@ export function injectComponentScripts() {
 	injectScriptOnce(makeLearnMoreScript());
 	injectScriptOnce(makeCheckoutScript());
 	injectScriptOnce(makeSelfServiceScript());
+	injectScriptOnce(makeSeparateBagScript());
 }
 
 type Callback = () => void;
@@ -60,6 +61,13 @@ function makeSelfServiceScript() {
 	return makeScriptTag({
 		id: "pd-self-service-script",
 		src: "https://www.purpledotprice.com/api/v1/self-service.js",
+	});
+}
+
+function makeSeparateBagScript() {
+	return makeScriptTag({
+		id: "pd-separate-bag-script",
+		src: "https://www.purpledotprice.com/api/v1/separate-bag.js",
 	});
 }
 

@@ -30,6 +30,7 @@ export interface PurpleDotCheckoutElement extends Element {
 		quantity: number;
 		templatePaymentPlanId?: string;
 	}) => Promise<PurpleDotAddItemResponse>;
+	show: () => void;
 }
 
 export async function open(args?: { cartId?: string }) {

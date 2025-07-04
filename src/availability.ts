@@ -5,6 +5,12 @@ import {
 } from "./api";
 import { getConfig } from "./config";
 
+type AvailabilityRequest<J> = J extends
+	| { variantId: string }
+	| { productHandle: string }
+	? J
+	: never;
+
 /**
  * Returns the availability of a product or variant.
  *
@@ -14,10 +20,10 @@ import { getConfig } from "./config";
  * @param inStockCallback A callback to check if the product is in stock.
  * @returns The in stock/preorder/out of stock state of the product or variant.
  */
-export async function availability<I>(
-	request: { variantId: string } | { productHandle: string },
+export async function availability<I, J>(
+	request: AvailabilityRequest<J>,
 	inStockCallback?: (
-		request: { variantId: string } | { productHandle: string },
+		request: AvailabilityRequest<J>,
 		getPreorderState: () => Promise<PurpleDotAvailability | null>,
 	) => Promise<I | false>,
 ): Promise<PurpleDotAvailability<I>> {

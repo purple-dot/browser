@@ -31,6 +31,7 @@
   ],
   "exports": {
     ".": "./dist/index.js",
+    "./availability": "./dist/availability.js",
     "./api": "./dist/api.js",
     "./checkout": "./dist/checkout.js",
     "./cart": "./dist/cart.js",

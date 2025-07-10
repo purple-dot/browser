@@ -73,4 +73,37 @@ describe("availability", () => {
 			});
 		});
 	});
+
+	describe("when the product is not in stock but our api says that it is", () => {
+		beforeEach(() => {
+			fetchMocker.mockResponse(
+				JSON.stringify({
+					data: {
+						state: "AVAILABLE_IN_STOCK",
+						waitlist: {
+							id: "123",
+							selling_plan_id: "456",
+							display_dispatch_date: "2025-01-01",
+							units_left: 10,
+						},
+					},
+				}),
+			);
+		});
+
+		it("should return ON_PREORDER", async () => {
+			const state = await availability({ variantId: "123" }, () =>
+				Promise.resolve(false),
+			);
+			expect(state).toEqual({
+				state: "ON_PREORDER",
+				waitlist: {
+					id: "123",
+					selling_plan_id: "456",
+					display_dispatch_date: "2025-01-01",
+					units_left: 10,
+				},
+			});
+		});
+	});
 });

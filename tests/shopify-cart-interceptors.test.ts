@@ -83,7 +83,7 @@ describe("ShopifyAddToCartInterceptor", () => {
 			expect(fetchSpy).toHaveBeenCalledWith(
 				expect.stringContaining("/cart/add.js"),
 				{
-					body: '{"items":[{"id":"1","properties":{"__releaseId":123,"Purple Dot Pre-order":"tomorrow"}}]}',
+					body: '{"items":[{"id":"1","quantity":1,"properties":{"__releaseId":123,"Purple Dot Pre-order":"tomorrow"}}]}',
 					headers: {
 						"Content-Type": "application/json",
 					},

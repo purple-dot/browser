@@ -12,6 +12,8 @@ export type PreorderAttributes = {
 
 export interface CartItem {
 	id: string;
+	variantId: string | null;
+	quantity: number;
 }
 
 export interface Cart<T extends CartItem> {
@@ -20,14 +22,14 @@ export interface Cart<T extends CartItem> {
 	removePreorderAttributes: (item: T) => T;
 
 	// Queries
-	fetchItems: (cartId?: string) => Promise<Required<T>[]>;
+	fetchItems: (cartId?: string | null) => Promise<Required<T>[]>;
 	getCartId: () => Promise<string | null>;
 	getCartType: () => string;
 
 	// Mutations
-	decrementQuantity: (id: string, cartId?: string) => Promise<void>;
-	clear: (cartId?: string) => Promise<void>;
-	navigateToCheckout: (cartId?: string) => Promise<void>;
+	decrementQuantity: (id: string, cartId?: string | null) => Promise<void>;
+	clear: (cartId?: string | null) => Promise<void>;
+	navigateToCheckout: (cartId?: string | null) => Promise<void>;
 }
 
 export async function cartHasPreorderItem(cartItems?: CartItem[]) {

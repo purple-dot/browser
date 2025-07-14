@@ -138,11 +138,11 @@ function getItemsFromRequest(
 					id: item.id,
 					variantId: `${item.id}`,
 					properties: item.properties,
+					quantity:
+						item.quantity || item.quantity === 0
+							? parseFloat(item.quantity)
+							: 1,
 				};
-
-				if (item.quantity || item.quantity === 0) {
-					newItem.quantity = parseFloat(item.quantity);
-				}
 
 				pdAddToCartRequests.push(newItem);
 			}

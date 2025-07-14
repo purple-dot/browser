@@ -4,8 +4,8 @@ import type { Cart, CartItem, PreorderAttributes } from "./cart";
 import type { JSONObject } from "./interceptors";
 
 export interface ShopifyAJAXCartItem extends CartItem {
-	variantId?: string;
-	quantity?: number;
+	variantId: string | null;
+	quantity: number;
 	properties?: Record<string, string>;
 }
 

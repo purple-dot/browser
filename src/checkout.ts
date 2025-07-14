@@ -1,4 +1,6 @@
-import { getCartAdapter } from "./cart";
+import { fetchVariantsPreorderState } from "./api";
+import { type CartItem, getCartAdapter } from "./cart";
+import { idFromGid } from "./gid";
 import { onceCheckoutScriptLoaded } from "./web-components";
 
 export type PurpleDotAddItemResponse =
@@ -41,12 +43,21 @@ export async function open(args?: { cartId?: string }) {
 	const element = document.createElement("purple-dot-checkout");
 	document.body.appendChild(element);
 
+	const cartAdapter = getCartAdapter();
+	const cartId = args?.cartId ?? (await cartAdapter.getCartId());
+	const cartType = cartAdapter.getCartType();
+	const cartItems = await cartAdapter.fetchItems(cartId);
+	const requiresSeparateCheckout =
+		await cartRequiresSeparateCheckout(cartItems);
+
 	return new Promise<void>((resolve) => {
 		onceCheckoutScriptLoaded(async () => {
-			const cartId = args?.cartId ?? (await getCartAdapter().getCartId());
-			const cartType = getCartAdapter().getCartType();
-			// @ts-ignore
-			element.open({ cartId, cartType });
+			if (requiresSeparateCheckout) {
+				// @ts-ignore
+				element.open({ cartId, cartType });
+			} else {
+				await cartAdapter.navigateToCheckout(cartId);
+			}
 
 			resolve();
 		});
@@ -93,4 +104,25 @@ function getOrCreateCheckoutElement() {
 	}
 
 	return element as PurpleDotCheckoutElement;
+}
+
+async function cartRequiresSeparateCheckout(cartItems: CartItem[]) {
+	const results = await Promise.all(
+		cartItems.map((cartItem) => cartItemRequiresSeparateCheckout(cartItem)),
+	);
+	return results.some((result) => result);
+}
+
+async function cartItemRequiresSeparateCheckout(cartItem: CartItem) {
+	if (cartItem.variantId) {
+		const res = await fetchVariantsPreorderState(idFromGid(cartItem.variantId));
+		if (
+			res &&
+			(!res.waitlist || res.waitlist.compatible_checkouts.includes("native"))
+		) {
+			return false;
+		}
+	}
+
+	return true;
 }

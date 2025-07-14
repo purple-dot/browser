@@ -12,6 +12,7 @@ export interface ProductPreorderState {
 			short: string;
 		} | null;
 		units_left: number;
+		compatible_checkouts: ("purple_dot" | "native")[];
 	} | null;
 }
 
@@ -60,6 +61,7 @@ export interface VariantPreorderState {
 			short: string;
 		} | null;
 		units_left: number;
+		compatible_checkouts: ("purple_dot" | "native")[];
 	} | null;
 	product: {
 		id: string;

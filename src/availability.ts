@@ -68,6 +68,7 @@ export interface PurpleDotOnPreorder {
 		selling_plan_id?: string;
 		display_dispatch_date: string;
 		units_left: number;
+		compatible_checkouts: ("purple_dot" | "native")[];
 	};
 }
 
@@ -96,6 +97,7 @@ function mapPreorderStateToAvailability(
 				selling_plan_id: preorderState.waitlist.selling_plan_id ?? undefined,
 				display_dispatch_date: preorderState.waitlist.display_dispatch_date,
 				units_left: preorderState.waitlist.units_left,
+				compatible_checkouts: preorderState.waitlist.compatible_checkouts,
 			},
 		};
 	} else if (preorderState?.state === "AVAILABLE_IN_STOCK") {

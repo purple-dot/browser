@@ -1,7 +1,7 @@
 import type { Cart, CartItem, PreorderAttributes } from "./cart";
+import { idFromGid } from "./gid";
 
 export interface ShopifyStorefrontCartItem extends CartItem {
-	quantity?: number;
 	attributes?: { key: string; value: string }[];
 	merchandise?: {
 		id: string;
@@ -42,8 +42,12 @@ export class ShopifyStorefrontCart implements Cart<ShopifyStorefrontCartItem> {
 	}
 
 	async fetchItems(
-		cartId?: string,
+		cartId?: string | null,
 	): Promise<Required<ShopifyStorefrontCartItem>[]> {
+		if (!cartId) {
+			throw new Error("cartId must be provided to ShopifyStorefrontCart");
+		}
+
 		const body = await this.graphql({
 			query: `query cart($cartId: ID!) {
         cart(id: $cartId) {
@@ -71,11 +75,18 @@ export class ShopifyStorefrontCart implements Cart<ShopifyStorefrontCartItem> {
 		// rome-ignore lint/suspicious/noExplicitAny: any is the right type here
 		return (body as any).data.cart.lines.edges.map(
 			// rome-ignore lint/suspicious/noExplicitAny: any is the right type here
-			({ node }: { node: any }) => node,
+			({ node }: { node: any }) => ({
+				...node,
+				variantId: node.merchandise.id,
+			}),
 		);
 	}
 
-	async decrementQuantity(variantId: string, cartId?: string) {
+	async decrementQuantity(variantId: string, cartId?: string | null) {
+		if (!cartId) {
+			throw new Error("cartId must be provided to ShopifyStorefrontCart");
+		}
+
 		const items = await this.fetchItems(cartId);
 		const line = items.find(
 			(item) => idFromGid(item.merchandise.id) === variantId,
@@ -115,7 +126,11 @@ export class ShopifyStorefrontCart implements Cart<ShopifyStorefrontCartItem> {
 		});
 	}
 
-	async clear(cartId?: string) {
+	async clear(cartId?: string | null) {
+		if (!cartId) {
+			throw new Error("cartId must be provided to ShopifyStorefrontCart");
+		}
+
 		const items = await this.fetchItems(cartId);
 		const lineIds = items.map((item) => item.id);
 		await this.graphql({
@@ -144,7 +159,10 @@ export class ShopifyStorefrontCart implements Cart<ShopifyStorefrontCartItem> {
 		});
 	}
 
-	async navigateToCheckout(cartId?: string) {
+	async navigateToCheckout(cartId?: string | null) {
+		if (!cartId) {
+			throw new Error("cartId must be provided to ShopifyStorefrontCart");
+		}
 		const body = await this.graphql({
 			query: `query cart($cartId: ID!) {
         cart(id: $cartId) {
@@ -179,8 +197,4 @@ export class ShopifyStorefrontCart implements Cart<ShopifyStorefrontCartItem> {
 		});
 		return await res.json();
 	}
-}
-
-function idFromGid(gid: string) {
-	return gid.split("/")[4];
 }

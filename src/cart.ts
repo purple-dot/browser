@@ -14,6 +14,7 @@ export interface CartItem {
 	id: string;
 	variantId: string | null;
 	quantity: number;
+	attributes: { key: string; value: string }[];
 }
 
 export interface Cart<T extends CartItem> {
@@ -44,4 +45,38 @@ export function getCartAdapter(): Cart<CartItem> {
 		throw new Error("@purple-dot/browser not initialised");
 	}
 	return cart;
+}
+
+export function purpleDotAttributes(variant: {
+	isPreorder: boolean;
+	releaseId?: string | null;
+	sellingPlanId?: string | null;
+	compatibleCheckouts?: string[];
+	estimatedShipDates?: string | null;
+}): { key: string; value: string }[] {
+	if (!variant.isPreorder) {
+		return [];
+	}
+
+	const attributes = [];
+
+	if (variant.releaseId) {
+		attributes.push({ key: "__releaseId", value: variant.releaseId });
+	}
+
+	if (!variant.sellingPlanId && variant.estimatedShipDates) {
+		attributes.push({
+			key: "Purple Dot Pre-order",
+			value: variant.estimatedShipDates,
+		});
+	}
+
+	if (variant.compatibleCheckouts) {
+		attributes.push({
+			key: "__pdCheckoutRequired",
+			value: variant.compatibleCheckouts.includes("native") ? "false" : "true",
+		});
+	}
+
+	return attributes;
 }

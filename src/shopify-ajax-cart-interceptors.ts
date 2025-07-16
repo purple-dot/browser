@@ -138,6 +138,7 @@ function getItemsFromRequest(
 					id: item.id,
 					variantId: `${item.id}`,
 					properties: item.properties,
+					attributes: item.attributes,
 					quantity:
 						item.quantity || item.quantity === 0
 							? parseFloat(item.quantity)
@@ -168,6 +169,10 @@ function getItemsFromRequest(
 			variantId,
 			quantity,
 			properties,
+			attributes: Object.entries(properties ?? {}).map(([key, value]) => ({
+				key,
+				value,
+			})),
 		},
 	];
 

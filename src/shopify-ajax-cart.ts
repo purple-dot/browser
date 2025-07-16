@@ -15,7 +15,7 @@ export class ShopifyAJAXCart implements Cart<ShopifyAJAXCartItem> {
 	}
 
 	addPreorderAttributes(item: ShopifyAJAXCartItem, attrs: PreorderAttributes) {
-		return {
+		return addAttributes({
 			id: item.id,
 			variantId: item.variantId,
 			quantity: item.quantity,
@@ -24,11 +24,11 @@ export class ShopifyAJAXCart implements Cart<ShopifyAJAXCartItem> {
 				__releaseId: attrs.releaseId,
 				"Purple Dot Pre-order": attrs.displayShipDates,
 			},
-		};
+		});
 	}
 
 	removePreorderAttributes(item: ShopifyAJAXCartItem) {
-		return {
+		return addAttributes({
 			id: item.id,
 			variantId: item.variantId,
 			quantity: item.quantity,
@@ -37,7 +37,7 @@ export class ShopifyAJAXCart implements Cart<ShopifyAJAXCartItem> {
 					([key]) => key !== "__releaseId" && key !== "Purple Dot Pre-order",
 				),
 			),
-		};
+		});
 	}
 
 	async fetchItems() {
@@ -125,4 +125,16 @@ export async function updatePreorderAttributes(
 	}
 
 	return null;
+}
+
+export function addAttributes<
+	T extends { properties?: Record<string, string> },
+>(x: T) {
+	return {
+		...x,
+		attributes: Object.entries(x.properties ?? {}).map(([key, value]) => ({
+			key,
+			value,
+		})),
+	};
 }

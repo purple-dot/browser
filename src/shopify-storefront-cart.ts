@@ -2,7 +2,6 @@ import type { Cart, CartItem, PreorderAttributes } from "./cart";
 import { idFromGid } from "./gid";
 
 export interface ShopifyStorefrontCartItem extends CartItem {
-	attributes?: { key: string; value: string }[];
 	merchandise?: {
 		id: string;
 	};
@@ -78,6 +77,7 @@ export class ShopifyStorefrontCart implements Cart<ShopifyStorefrontCartItem> {
 			({ node }: { node: any }) => ({
 				...node,
 				variantId: node.merchandise.id,
+				attributes: node.attributes ?? [],
 			}),
 		);
 	}

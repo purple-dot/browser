@@ -115,6 +115,13 @@ async function cartRequiresSeparateCheckout(cartItems: CartItem[]) {
 
 async function cartItemRequiresSeparateCheckout(cartItem: CartItem) {
 	if (cartItem.variantId) {
+		const requiredAttr = cartItem.attributes.find(
+			({ key }) => key === "__pdCheckoutRequired",
+		);
+		if (requiredAttr) {
+			return requiredAttr.value === "true";
+		}
+
 		const res = await fetchVariantsPreorderState(idFromGid(cartItem.variantId));
 		if (
 			res &&

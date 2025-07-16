@@ -16,7 +16,6 @@
     "start:test-http-server": "cd cypress/support && pnpm exec http-server . -p 8080",
     "build:test": "webpack --config cypress/support/webpack.config.js",
     "dev": "webpack --config cypress/support/webpack.config.js --watch"
-
   },
   "repository": {
     "type": "git",
@@ -37,7 +36,8 @@
     "./cart": "./dist/cart.js",
     "./shopify-ajax-cart": "./dist/shopify-ajax-cart.js",
     "./shopify-ajax-interceptors": "./dist/shopify-ajax-cart-interceptors.js",
-    "./shopify-storefront-cart": "./dist/shopify-storefront-cart.js"
+    "./shopify-storefront-cart": "./dist/shopify-storefront-cart.js",
+    "./feature-flags": "./dist/feature-flags/index.js"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.0.6",
@@ -49,19 +49,20 @@
     "cypress": "^12.17.1",
     "happy-dom": "^15.10.2",
     "html-webpack-plugin": "^5.5.3",
+    "http-server": "^14.1.1",
     "jsdom": "22.1.0",
     "ts-loader": "^9.4.4",
-    "http-server": "^14.1.1",
     "typescript": "^5.1.6",
     "vitest": "^0.33.0",
+    "vitest-fetch-mock": "^0.4.5",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4",
-    "whatwg-fetch": "^3.6.2",
-    "vitest-fetch-mock": "^0.4.5"
+    "whatwg-fetch": "^3.6.2"
   },
   "packageManager": "pnpm@10.12.4",
   "dependencies": {
     "js-cookie": "^3.0.5",
+    "murmurhash": "^2.0.1",
     "uuid": "^9.0.0"
   },
   "engines": {

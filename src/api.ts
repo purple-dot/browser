@@ -1,4 +1,5 @@
 import { getConfig } from "./config";
+import type { FlagConfig } from "./feature-flags";
 import { trackEvent } from "./tracking";
 
 export interface ProductPreorderState {
@@ -90,6 +91,27 @@ export async function fetchVariantsPreorderState(
 				body.data.state === "ON_PREORDER" ? body.data.waitlist.id : null,
 			source: "api_call",
 		}).catch(() => {});
+
+		return body.data;
+	}
+
+	return null;
+}
+
+interface IntegrationSettings {
+	flags: FlagConfig[];
+}
+
+export async function fetchIntegrationSettings(): Promise<IntegrationSettings | null> {
+	const url = new URL(
+		"https://www.purpledotprice.com/api/v1/integration-settings",
+	);
+
+	identifyShop(url);
+	const resp = await fetch(url.toString());
+
+	if (resp.ok) {
+		const body = await resp.json();
 
 		return body.data;
 	}

@@ -1,5 +1,5 @@
 import { v4 } from "uuid";
-import { fetchVariantsPreorderState } from "./api";
+import { fetchIntegrationSettings, fetchVariantsPreorderState } from "./api";
 import { type CartItem, getCartAdapter } from "./cart";
 import { FeatureFlags } from "./feature-flags";
 import { idFromGid } from "./gid";
@@ -125,26 +125,9 @@ async function cartRequiresSeparateCheckout(
 		return true;
 	}
 
-	const rolloutPercentage = 0; // TODO: Load this value from the backend
-	const featureFlags = new FeatureFlags(
-		[
-			{
-				type: "variation" as const,
-				flag: "NATIVE_CHECKOUT",
-				variations: [
-					{
-						variation: "native",
-						weight: rolloutPercentage,
-					},
-					{
-						variation: "purple_dot",
-						weight: 1 - rolloutPercentage,
-					},
-				],
-			},
-		],
-		sessionId ?? sessionIdFallback,
-	);
+	const integrationSettings = await fetchIntegrationSettings();
+	const flags = integrationSettings?.flags ?? [];
+	const featureFlags = new FeatureFlags(flags, sessionId ?? sessionIdFallback);
 
 	const variation = featureFlags.variation("NATIVE_CHECKOUT");
 	if (variation === "native") {

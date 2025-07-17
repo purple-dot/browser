@@ -1,5 +1,7 @@
+import { v4 } from "uuid";
 import { fetchVariantsPreorderState } from "./api";
 import { type CartItem, getCartAdapter } from "./cart";
+import { FeatureFlags } from "./feature-flags";
 import { idFromGid } from "./gid";
 import { onceCheckoutScriptLoaded } from "./web-components";
 
@@ -35,7 +37,7 @@ export interface PurpleDotCheckoutElement extends Element {
 	show: () => void;
 }
 
-export async function open(args?: { cartId?: string }) {
+export async function open(args?: { cartId?: string; sessionId?: string }) {
 	if (document.querySelector("purple-dot-checkout")) {
 		return;
 	}
@@ -47,8 +49,10 @@ export async function open(args?: { cartId?: string }) {
 	const cartId = args?.cartId ?? (await cartAdapter.getCartId());
 	const cartType = cartAdapter.getCartType();
 	const cartItems = await cartAdapter.fetchItems(cartId);
-	const requiresSeparateCheckout =
-		await cartRequiresSeparateCheckout(cartItems);
+	const requiresSeparateCheckout = await cartRequiresSeparateCheckout(
+		cartItems,
+		args?.sessionId,
+	);
 
 	return new Promise<void>((resolve) => {
 		onceCheckoutScriptLoaded(async () => {
@@ -106,11 +110,48 @@ function getOrCreateCheckoutElement() {
 	return element as PurpleDotCheckoutElement;
 }
 
-async function cartRequiresSeparateCheckout(cartItems: CartItem[]) {
+const sessionIdFallback = v4();
+
+async function cartRequiresSeparateCheckout(
+	cartItems: CartItem[],
+	sessionId?: string,
+) {
 	const results = await Promise.all(
 		cartItems.map((cartItem) => cartItemRequiresSeparateCheckout(cartItem)),
 	);
-	return results.some((result) => result);
+	const requiresSeparate = results.some((result) => result);
+
+	if (requiresSeparate) {
+		return true;
+	}
+
+	const rolloutPercentage = 0; // TODO: Load this value from the backend
+	const featureFlags = new FeatureFlags(
+		[
+			{
+				type: "variation" as const,
+				flag: "NATIVE_CHECKOUT",
+				variations: [
+					{
+						variation: "native",
+						weight: rolloutPercentage,
+					},
+					{
+						variation: "purple_dot",
+						weight: 1 - rolloutPercentage,
+					},
+				],
+			},
+		],
+		sessionId ?? sessionIdFallback,
+	);
+
+	const variation = featureFlags.variation("NATIVE_CHECKOUT");
+	if (variation === "native") {
+		return false;
+	}
+
+	return true;
 }
 
 async function cartItemRequiresSeparateCheckout(cartItem: CartItem) {

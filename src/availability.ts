@@ -58,23 +58,37 @@ export async function availability<I, J>(
 	}
 
 	const state = await getPreorderState();
-	return state ?? { state: "SOLD_OUT" };
+
+	if (state?.state === "SOLD_OUT") {
+		return { state: "SOLD_OUT" };
+	}
+
+	// At this point we know that it should not be considered in stock, so remap it to a waitlist if there is one.
+
+	if (state?.waitlist) {
+		return { state: "ON_PREORDER", waitlist: state.waitlist };
+	}
+
+	return { state: "SOLD_OUT" };
+}
+
+interface PurpleDotWaitlist {
+	id: string;
+	selling_plan_id?: string;
+	display_dispatch_date: string;
+	units_left: number;
+	compatible_checkouts: ("purple_dot" | "native")[];
 }
 
 export interface PurpleDotOnPreorder {
 	state: "ON_PREORDER";
-	waitlist: {
-		id: string;
-		selling_plan_id?: string;
-		display_dispatch_date: string;
-		units_left: number;
-		compatible_checkouts: ("purple_dot" | "native")[];
-	};
+	waitlist: PurpleDotWaitlist;
 }
 
 export interface PurpleDotAvailableInStock<I> {
 	state: "AVAILABLE_IN_STOCK";
 	available?: I;
+	waitlist?: PurpleDotWaitlist;
 }
 
 export interface PurpleDotSoldOut {
@@ -92,19 +106,34 @@ function mapPreorderStateToAvailability(
 	if (preorderState?.state === "ON_PREORDER" && preorderState.waitlist) {
 		return {
 			state: "ON_PREORDER",
-			waitlist: {
-				id: preorderState.waitlist.id,
-				selling_plan_id: preorderState.waitlist.selling_plan_id ?? undefined,
-				display_dispatch_date: preorderState.waitlist.display_dispatch_date,
-				units_left: preorderState.waitlist.units_left,
-				compatible_checkouts: preorderState.waitlist.compatible_checkouts,
-			},
+			waitlist: mapWaitlist(preorderState.waitlist),
 		};
 	} else if (preorderState?.state === "AVAILABLE_IN_STOCK") {
-		return { state: "AVAILABLE_IN_STOCK" };
+		return {
+			state: "AVAILABLE_IN_STOCK",
+			waitlist: mapWaitlist(preorderState.waitlist),
+		};
 	} else if (preorderState?.state === "SOLD_OUT") {
 		return { state: "SOLD_OUT" };
 	} else {
 		return null;
 	}
+}
+
+function mapWaitlist<
+	T extends ProductPreorderState["waitlist"] | undefined | null,
+>(waitlist: T): T extends null | undefined ? undefined : PurpleDotWaitlist {
+	if (!waitlist) {
+		return undefined as T extends null | undefined
+			? undefined
+			: PurpleDotWaitlist;
+	}
+
+	return {
+		id: waitlist.id,
+		selling_plan_id: waitlist.selling_plan_id ?? undefined,
+		display_dispatch_date: waitlist.display_dispatch_date,
+		units_left: waitlist.units_left,
+		compatible_checkouts: waitlist.compatible_checkouts,
+	} as T extends null | undefined ? undefined : PurpleDotWaitlist;
 }

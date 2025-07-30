@@ -110,7 +110,7 @@ function getOrCreateCheckoutElement() {
 	return element as PurpleDotCheckoutElement;
 }
 
-const sessionIdFallback = v4();
+let sessionIdFallback: string;
 
 async function cartRequiresSeparateCheckout(
 	cartItems: CartItem[],
@@ -123,6 +123,10 @@ async function cartRequiresSeparateCheckout(
 
 	if (requiresSeparate) {
 		return true;
+	}
+
+	if (!sessionIdFallback) {
+		sessionIdFallback = v4();
 	}
 
 	const integrationSettings = await fetchIntegrationSettings();

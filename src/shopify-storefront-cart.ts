@@ -82,16 +82,25 @@ export class ShopifyStorefrontCart implements Cart<ShopifyStorefrontCartItem> {
 		);
 	}
 
-	async decrementQuantity(variantId: string, cartId?: string | null) {
+	async decrementQuantity(
+		variantIdOrCartLineItemId: string,
+		cartId?: string | null,
+	) {
 		if (!cartId) {
 			throw new Error("cartId must be provided to ShopifyStorefrontCart");
 		}
 
 		const items = await this.fetchItems(cartId);
-		const line = items.find(
-			(item) => idFromGid(item.merchandise.id) === variantId,
-		);
+		const line = items.find((item) => {
+			if (idFromGid(item.merchandise.id) === variantIdOrCartLineItemId) {
+				return true;
+			}
+			return item.id === variantIdOrCartLineItemId;
+		});
 		if (!line) {
+			console.warn(
+				`Could not find line item with id ${variantIdOrCartLineItemId} in cart ${cartId}`,
+			);
 			return;
 		}
 		const quantity = line.quantity - 1;

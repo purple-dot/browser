@@ -20,6 +20,7 @@ export type PurpleDotAddItemResponse =
 
 export interface PurpleDotCheckoutElement extends Element {
 	open: (args: { cartId: string; cartType: string }) => void;
+	close: () => void;
 	expressCheckout: (args: {
 		variantId: string;
 		releaseId: string;
@@ -37,12 +38,14 @@ export interface PurpleDotCheckoutElement extends Element {
 	show: () => void;
 }
 
+const CHECKOUT_ELEMENT = "purple-dot-checkout";
+
 export async function open(args?: { cartId?: string; sessionId?: string }) {
-	if (document.querySelector("purple-dot-checkout")) {
+	if (document.querySelector(CHECKOUT_ELEMENT)) {
 		return;
 	}
 
-	const element = document.createElement("purple-dot-checkout");
+	const element = document.createElement(CHECKOUT_ELEMENT);
 	document.body.appendChild(element);
 
 	const cartAdapter = getCartAdapter();
@@ -100,10 +103,10 @@ export async function purpleDotCheckout<T>(
 }
 
 function getOrCreateCheckoutElement() {
-	let element = document.querySelector("purple-dot-checkout");
+	let element = document.querySelector(CHECKOUT_ELEMENT);
 
 	if (!element) {
-		element = document.createElement("purple-dot-checkout");
+		element = document.createElement(CHECKOUT_ELEMENT);
 		document.body.appendChild(element);
 	}
 

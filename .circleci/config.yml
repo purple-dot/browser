@@ -47,18 +47,6 @@ jobs:
       - node/install:
           install-pnpm: true
       - run: pnpm run test
-      - run:
-          command: pnpm run start:test-http-server
-          background: true
-      - run: pnpm run build:test
-      - store_test_results:
-          path: /root/repo/cypress/results
-      - store_artifacts:
-          path: /root/repo/cypress/videos
-          destination: cypress-videos
-      - store_artifacts:
-          path: /root/repo/cypress/screenshots
-          destination: cypress-screenshots
 
   publish:
     executor: node

@@ -5,7 +5,7 @@ orbs:
 
 executors:
   node:
-    docker: &node_image
+    docker:
       - image: cimg/node:22.11-browsers
         environment:
           TERM: xterm

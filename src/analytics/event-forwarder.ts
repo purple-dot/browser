@@ -28,9 +28,13 @@ export class EventForwarder {
     }
   }
 
-  private handleError(error: unknown, eventName: string, provider: AnalyticsProvider) {
+  private handleError(
+    error: unknown,
+    eventName: string,
+    provider: AnalyticsProvider,
+  ) {
     console.error(
-      `Purple Dot: Failed to track ${String(eventName)} with ${provider.name}:`,
+      `Purple Dot: Failed to track ${eventName} with ${provider.name}:`,
       error,
     );
   }

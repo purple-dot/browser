@@ -4,212 +4,218 @@ import { EventForwarder } from "./event-forwarder";
 import { AnalyticsProvider } from "./provider";
 
 class MockProvider extends AnalyticsProvider {
-  name: string;
-  private enabled: boolean;
-  track = vi.fn();
-  protected handlers = {};
+	readonly name: string;
 
-  constructor(name: string, enabled: boolean) {
-    super();
-    this.name = name;
-    this.enabled = enabled;
-  }
+	private readonly enabled: boolean;
 
-  isEnabled(): boolean {
-    return this.enabled;
-  }
+	protected handlers: Partial<{
+		[K in keyof PurpleDotEvents]: (
+			data: PurpleDotEvents[K],
+		) => void | Promise<void>;
+	}> = {};
+
+	constructor(name: string, enabled: boolean) {
+		super();
+		this.name = name;
+		this.enabled = enabled;
+	}
+
+	isEnabled(): boolean {
+		return this.enabled;
+	}
+
+	setHandler<K extends keyof PurpleDotEvents>(
+		eventName: K,
+		handler: (data: PurpleDotEvents[K]) => void | Promise<void>,
+	): void {
+		(
+			this.handlers as Record<
+				string,
+				(data: PurpleDotEvents[K]) => void | Promise<void>
+			>
+		)[eventName] = handler;
+	}
 }
 
 describe("EventForwarder", () => {
-  let mockProvider1: MockProvider;
-  let mockProvider2: MockProvider;
-  let mockDisabledProvider: MockProvider;
+	let mockProvider1: MockProvider;
+	let mockProvider2: MockProvider;
+	let mockDisabledProvider: MockProvider;
 
-  beforeEach(() => {
-    mockProvider1 = new MockProvider("Provider1", true);
-    mockProvider2 = new MockProvider("Provider2", true);
-    mockDisabledProvider = new MockProvider("Provider3", false);
-  });
+	beforeEach(() => {
+		mockProvider1 = new MockProvider("Provider1", true);
+		mockProvider2 = new MockProvider("Provider2", true);
+		mockDisabledProvider = new MockProvider("Provider3", false);
 
-  describe("track", () => {
-    it("should forward events to all enabled providers", () => {
-      const forwarder = new EventForwarder([mockProvider1, mockProvider2]);
+		vi.spyOn(mockProvider1, "track");
+		vi.spyOn(mockProvider2, "track");
+		vi.spyOn(mockDisabledProvider, "track");
+	});
 
-      const eventData: PurpleDotEvents["PreorderCreated"] = {
-        reference: "REF123",
-        email: "test@example.com",
-        shippingAddress: {
-          firstName: "John",
-          lastName: "Doe",
-          address1: "123 Main St",
-          city: "New York",
-          province: "NY",
-          country: "US",
-          zip: "10001",
-        },
-        lineItems: [
-          {
-            productId: "prod1",
-            skuId: "sku1",
-            name: "Product 1",
-            sku: "SKU-001",
-            price: { amount: 100, currency: "USD" },
-            quantity: 2,
-            purchaseType: "preorder",
-          },
-        ],
-        total: { amount: 200, currency: "USD" },
-        shipping: { amount: 10 },
-        tax: { amount: 15 },
-        discountCode: "SAVE10",
-      };
+	it("should forward events to all enabled providers", () => {
+		const forwarder = new EventForwarder([mockProvider1, mockProvider2]);
 
-      forwarder.track("PreorderCreated", eventData);
+		const eventData: PurpleDotEvents["PreorderCreated"] = {
+			reference: "REF123",
+			email: "test@example.com",
+			shippingAddress: {
+				firstName: "John",
+				lastName: "Doe",
+				address1: "123 Main St",
+				city: "New York",
+				province: "NY",
+				country: "US",
+				zip: "10001",
+			},
+			lineItems: [
+				{
+					productId: "prod1",
+					skuId: "sku1",
+					name: "Product 1",
+					sku: "SKU-001",
+					price: { amount: 100, currency: "USD" },
+					quantity: 2,
+					purchaseType: "preorder",
+				},
+			],
+			total: { amount: 200, currency: "USD" },
+			shipping: { amount: 10 },
+			tax: { amount: 15 },
+			discountCode: "SAVE10",
+		};
 
-      expect(mockProvider1.track).toHaveBeenCalledWith(
-        "PreorderCreated",
-        eventData,
-      );
-      expect(mockProvider2.track).toHaveBeenCalledWith(
-        "PreorderCreated",
-        eventData,
-      );
-    });
+		forwarder.track("PreorderCreated", eventData);
 
-    it("should filter out disabled providers", () => {
-      const forwarder = new EventForwarder([
-        mockProvider1,
-        mockProvider2,
-        mockDisabledProvider,
-      ]);
+		expect(mockProvider1.track).toHaveBeenCalledWith(
+			"PreorderCreated",
+			eventData,
+		);
+		expect(mockProvider2.track).toHaveBeenCalledWith(
+			"PreorderCreated",
+			eventData,
+		);
+	});
 
-      const eventData: PurpleDotEvents["AddToCart"] = {
-        skuId: "123",
-        internalSkuId: "456",
-        releaseId: "789",
-        price: { amount: 10, currency: "USD" },
-        quantity: 1,
-      };
+	it("should filter out disabled providers", () => {
+		const forwarder = new EventForwarder([
+			mockProvider1,
+			mockProvider2,
+			mockDisabledProvider,
+		]);
 
-      forwarder.track("AddToCart", eventData);
+		const eventData: PurpleDotEvents["AddToCart"] = {
+			skuId: "123",
+			internalSkuId: "456",
+			releaseId: "789",
+			price: { amount: 10, currency: "USD" },
+			quantity: 1,
+		};
 
-      expect(mockProvider1.track).toHaveBeenCalledWith("AddToCart", eventData);
-      expect(mockProvider2.track).toHaveBeenCalledWith("AddToCart", eventData);
-      expect(mockDisabledProvider.track).not.toHaveBeenCalled();
-    });
+		forwarder.track("AddToCart", eventData);
 
-    it("should handle no enabled providers", () => {
-      const forwarder = new EventForwarder([mockDisabledProvider]);
+		expect(mockProvider1.track).toHaveBeenCalledWith("AddToCart", eventData);
+		expect(mockProvider2.track).toHaveBeenCalledWith("AddToCart", eventData);
+		expect(mockDisabledProvider.track).not.toHaveBeenCalled();
+	});
 
-      const eventData: PurpleDotEvents["AddToCart"] = {
-        skuId: "123",
-        internalSkuId: "456",
-        releaseId: "789",
-        price: { amount: 10, currency: "USD" },
-        quantity: 1,
-      };
+	it("should handle no enabled providers", () => {
+		const forwarder = new EventForwarder([mockDisabledProvider]);
 
-      forwarder.track("AddToCart", eventData);
+		const eventData: PurpleDotEvents["AddToCart"] = {
+			skuId: "123",
+			internalSkuId: "456",
+			releaseId: "789",
+			price: { amount: 10, currency: "USD" },
+			quantity: 1,
+		};
 
-      expect(mockDisabledProvider.track).not.toHaveBeenCalled();
-    });
+		forwarder.track("AddToCart", eventData);
 
-    it("should handle synchronous provider errors gracefully", () => {
-      const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+		expect(mockDisabledProvider.track).not.toHaveBeenCalled();
+	});
 
-      mockProvider1.track = vi.fn(() => {
-        throw new Error("Provider error");
-      });
+	it("should handle provider errors gracefully", async () => {
+		const consoleErrorSpy = vi
+			.spyOn(console, "error")
+			.mockImplementation(() => {});
 
-      const forwarder = new EventForwarder([mockProvider1, mockProvider2]);
+		mockProvider1.setHandler("AddToCart", () => {
+			throw new Error("Provider error");
+		});
 
-      const eventData: PurpleDotEvents["AddToCart"] = {
-        skuId: "123",
-        internalSkuId: "456",
-        releaseId: "789",
-        price: { amount: 10, currency: "USD" },
-        quantity: 1,
-      };
+		const forwarder = new EventForwarder([mockProvider1, mockProvider2]);
 
-      forwarder.track("AddToCart", eventData);
+		const eventData: PurpleDotEvents["AddToCart"] = {
+			skuId: "123",
+			internalSkuId: "456",
+			releaseId: "789",
+			price: { amount: 10, currency: "USD" },
+			quantity: 1,
+		};
 
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        expect.stringContaining("Purple Dot: Failed to track AddToCart with Provider1"),
-        expect.any(Error),
-      );
-      expect(mockProvider2.track).toHaveBeenCalledWith("AddToCart", eventData);
+		await forwarder.track("AddToCart", eventData);
 
-      consoleErrorSpy.mockRestore();
-    });
+		expect(consoleErrorSpy).toHaveBeenCalledWith(
+			expect.stringContaining(
+				"[PurpleDot] Failed to track AddToCart with Provider1",
+			),
+			expect.any(Error),
+		);
 
-    it("should handle async provider errors gracefully", async () => {
-      const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+		consoleErrorSpy.mockRestore();
+	});
 
-      mockProvider1.track = vi.fn(() =>
-        Promise.reject(new Error("Async provider error")),
-      );
+	it("should continue forwarding to other providers if one fails", async () => {
+		const consoleErrorSpy = vi
+			.spyOn(console, "error")
+			.mockImplementation(() => {});
 
-      const forwarder = new EventForwarder([mockProvider1, mockProvider2]);
+		mockProvider1.setHandler("PreorderCancelled", () => {
+			throw new Error("Provider 1 error");
+		});
 
-      const eventData: PurpleDotEvents["AddToCart"] = {
-        skuId: "123",
-        internalSkuId: "456",
-        releaseId: "789",
-        price: { amount: 10, currency: "USD" },
-        quantity: 1,
-      };
+		mockProvider2.setHandler("PreorderCancelled", vi.fn());
 
-      forwarder.track("AddToCart", eventData);
+		const forwarder = new EventForwarder([
+			mockProvider1,
+			mockProvider2,
+			mockDisabledProvider,
+		]);
 
-      await new Promise((resolve) => setTimeout(resolve, 10));
+		const eventData: PurpleDotEvents["PreorderCancelled"] = {
+			preorderReference: "REF456",
+		};
 
-      expect(consoleErrorSpy).toHaveBeenCalled();
-      expect(mockProvider2.track).toHaveBeenCalledWith("AddToCart", eventData);
+		await forwarder.track("PreorderCancelled", eventData);
 
-      consoleErrorSpy.mockRestore();
-    });
+		expect(consoleErrorSpy).toHaveBeenCalledWith(
+			expect.stringContaining(
+				"[PurpleDot] Failed to track PreorderCancelled with Provider1",
+			),
+			expect.any(Error),
+		);
+		expect(mockProvider2.track).toHaveBeenCalledWith(
+			"PreorderCancelled",
+			eventData,
+		);
 
-    it("should continue forwarding to other providers if one fails", () => {
-      const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+		consoleErrorSpy.mockRestore();
+	});
 
-      mockProvider1.track = vi.fn(() => {
-        throw new Error("Provider 1 error");
-      });
+	it("should track different event types correctly", () => {
+		const forwarder = new EventForwarder([mockProvider1]);
 
-      const forwarder = new EventForwarder([
-        mockProvider1,
-        mockProvider2,
-        mockDisabledProvider,
-      ]);
+		const checkoutLoadedData: PurpleDotEvents["CheckoutLoaded"] = {
+			enableCombinedCart: true,
+		};
+		forwarder.track("CheckoutLoaded", checkoutLoadedData);
+		expect(mockProvider1.track).toHaveBeenCalledWith(
+			"CheckoutLoaded",
+			checkoutLoadedData,
+		);
 
-      const eventData: PurpleDotEvents["PreorderCancelled"] = { preorderReference: "REF456" };
-
-      forwarder.track("PreorderCancelled", eventData);
-
-      expect(mockProvider1.track).toHaveBeenCalled();
-      expect(mockProvider2.track).toHaveBeenCalledWith(
-        "PreorderCancelled",
-        eventData,
-      );
-
-      consoleErrorSpy.mockRestore();
-    });
-
-    it("should track different event types correctly", () => {
-      const forwarder = new EventForwarder([mockProvider1]);
-
-      const checkoutLoadedData: PurpleDotEvents["CheckoutLoaded"] = {
-        enableCombinedCart: true,
-      };
-      forwarder.track("CheckoutLoaded", checkoutLoadedData);
-      expect(mockProvider1.track).toHaveBeenCalledWith(
-        "CheckoutLoaded",
-        checkoutLoadedData,
-      );
-
-      const readyData: PurpleDotEvents["Ready"] = {};
-      forwarder.track("Ready", readyData);
-      expect(mockProvider1.track).toHaveBeenCalledWith("Ready", readyData);
-    });
-  });
+		const readyData: PurpleDotEvents["Ready"] = {};
+		forwarder.track("Ready", readyData);
+		expect(mockProvider1.track).toHaveBeenCalledWith("Ready", readyData);
+	});
 });

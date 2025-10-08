@@ -1,30 +1,34 @@
 import type { PurpleDotEvents } from "../custom-events";
 
+export type EventHandlersMap = Partial<{
+	[K in keyof PurpleDotEvents]: (
+		data: PurpleDotEvents[K],
+	) => void | Promise<void>;
+}>;
+
 export abstract class AnalyticsProvider {
-  abstract readonly name: string;
+	abstract readonly name: string;
 
-  abstract isEnabled(): boolean;
+	abstract isEnabled(): boolean;
 
-  protected abstract handlers: Partial<{
-    [K in keyof PurpleDotEvents]: (data: PurpleDotEvents[K]) => void | Promise<void>;
-  }>;
+	protected abstract handlers: EventHandlersMap;
 
-  track<K extends keyof PurpleDotEvents>(
-    eventName: K,
-    eventData: PurpleDotEvents[K],
-  ): void | Promise<void> {
-    const handler = this.handlers[eventName];
-    if (handler) {
-      const result = handler(eventData);
-      if (result instanceof Promise) {
-        return result.catch((error) => {
-          console.error(
-            `Purple Dot: Failed to track ${String(eventName)} with ${this.name}:`,
-            error,
-          );
-        });
-      }
-      return result;
-    }
-  }
+	async track<K extends keyof PurpleDotEvents>(
+		eventName: K,
+		eventData: PurpleDotEvents[K],
+	): Promise<void> {
+		const handler = this.handlers[eventName];
+		if (!handler) {
+			return;
+		}
+
+		try {
+			await handler(eventData);
+		} catch (error) {
+			console.error(
+				`[PurpleDot] Failed to track ${String(eventName)} with ${this.name}:`,
+				error,
+			);
+		}
+	}
 }

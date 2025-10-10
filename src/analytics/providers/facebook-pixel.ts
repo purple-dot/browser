@@ -1,4 +1,3 @@
-import type { EventForwardingConfig } from "../config";
 import { AnalyticsProvider, type EventHandlersMap } from "../provider";
 
 declare global {
@@ -13,10 +12,6 @@ declare global {
 
 export class FacebookPixelProvider extends AnalyticsProvider {
 	readonly name = "FacebookPixel";
-
-	constructor(private readonly config: EventForwardingConfig) {
-		super();
-	}
 
 	protected handlers: EventHandlersMap = {
 		PreorderCreated: (event) => {

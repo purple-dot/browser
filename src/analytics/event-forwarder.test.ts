@@ -15,7 +15,7 @@ class MockProvider extends AnalyticsProvider {
 	}> = {};
 
 	constructor(name: string, enabled: boolean) {
-		super();
+		super({});
 		this.name = name;
 		this.enabled = enabled;
 	}

@@ -1,4 +1,5 @@
 import type { PurpleDotEvents } from "../custom-events";
+import type { EventForwardingConfig } from "./config";
 
 export type EventHandlersMap = Partial<{
 	[K in keyof PurpleDotEvents]: (
@@ -12,6 +13,8 @@ export abstract class AnalyticsProvider {
 	abstract isEnabled(): boolean;
 
 	protected abstract handlers: EventHandlersMap;
+
+	constructor(protected readonly config: EventForwardingConfig) {}
 
 	async track<K extends keyof PurpleDotEvents>(
 		eventName: K,

@@ -1,4 +1,3 @@
-import type { EventForwardingConfig } from "../config";
 import { AnalyticsProvider, type EventHandlersMap } from "../provider";
 
 declare global {
@@ -11,10 +10,6 @@ declare global {
 
 export class TikTokPixelProvider extends AnalyticsProvider {
 	readonly name = "TikTokPixel";
-
-	constructor(private readonly config: EventForwardingConfig) {
-		super();
-	}
 
 	protected handlers: EventHandlersMap = {
 		PreorderCreated: (event) => {

@@ -1,4 +1,3 @@
-import type { EventForwardingConfig } from "../config";
 import { AnalyticsProvider, type EventHandlersMap } from "../provider";
 
 declare global {
@@ -17,10 +16,6 @@ declare global {
 
 export class YotpoProvider extends AnalyticsProvider {
 	readonly name = "Yotpo";
-
-	constructor(private readonly config: EventForwardingConfig) {
-		super();
-	}
 
 	protected handlers: EventHandlersMap = {
 		PreorderCreated: (event) => {

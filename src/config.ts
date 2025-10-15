@@ -1,3 +1,4 @@
+import type { EventForwardingConfig } from "./analytics/config";
 import type { PurpleDotAvailability } from "./availability";
 import type { Cart, CartItem } from "./cart";
 
@@ -22,6 +23,13 @@ export interface PurpleDotConfig {
 		request: { variantId: string } | { productHandle: string },
 		getPreorderState: () => Promise<PurpleDotAvailability | null>,
 	) => Promise<I | false>;
+
+	/**
+	 * Optional analytics provider configuration.
+	 * Configure credentials for third-party analytics providers (Google Ads, Facebook Pixel, etc.)
+	 * to automatically forward Purple Dot events to these platforms.
+	 */
+	analytics?: EventForwardingConfig;
 }
 let config: PurpleDotConfig | null = null;
 

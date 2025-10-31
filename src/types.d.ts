@@ -1,4 +1,5 @@
-import { PurpleDotConfig } from "./config";
+import type { PurpleDotCheckoutElement } from "./checkout";
+import type { PurpleDotConfig } from "./config";
 
 declare global {
 	interface Window {
@@ -10,5 +11,9 @@ declare global {
 				root?: string;
 			};
 		};
+	}
+
+	interface HTMLElementTagNameMap {
+		"purple-dot-checkout": PurpleDotCheckoutElement;
 	}
 }

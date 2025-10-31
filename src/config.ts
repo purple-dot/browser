@@ -22,6 +22,11 @@ export interface PurpleDotConfig {
 		request: { variantId: string } | { productHandle: string },
 		getPreorderState: () => Promise<PurpleDotAvailability | null>,
 	) => Promise<I | false>;
+
+	/**
+	 * Optional locale string to set on checkout web components.
+	 */
+	locale?: string;
 }
 let config: PurpleDotConfig | null = null;
 

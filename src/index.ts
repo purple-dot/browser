@@ -12,6 +12,7 @@ export function init(config: PurpleDotConfig) {
 	setConfig({
 		apiKey: config.apiKey,
 		cartAdapter: config.cartAdapter ?? new ShopifyAJAXCart(),
+		locale: config.locale,
 	});
 
 	if (globalThis.window) {

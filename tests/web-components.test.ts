@@ -10,20 +10,21 @@ import {
 
 describe("onceCheckoutScriptLoaded", () => {
 	test("fires the callback once the script is loaded", async () => {
-    const callback = vi.fn();
-    onceCheckoutScriptLoaded(callback);
-  
-    injectComponentScripts();
-  
-    // Find the script element and manually trigger the load event
-    // We do this because we have not enabled JavaScript evaluation in Happy DOM.
-    const script = document.getElementById("pd-checkout-script");
-    expect(script).toBeTruthy();
-    
-    // Manually dispatch the load event
-    script?.dispatchEvent(new Event("load"));
-  
-    expect(callback).toHaveBeenCalled();	});
+		const callback = vi.fn();
+		onceCheckoutScriptLoaded(callback);
+
+		injectComponentScripts();
+
+		// Find the script element and manually trigger the load event
+		// We do this because we have not enabled JavaScript evaluation in Happy DOM.
+		const script = document.getElementById("pd-checkout-script");
+		expect(script).toBeTruthy();
+
+		// Manually dispatch the load event
+		script?.dispatchEvent(new Event("load"));
+
+		expect(callback).toHaveBeenCalled();
+	});
 
 	test("fires the callback immediately if the script is already loaded", async () => {
 		const callback = vi.fn();

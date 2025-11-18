@@ -19,6 +19,9 @@ describe("onceCheckoutScriptLoaded", () => {
 		// We do this because we have not enabled JavaScript evaluation in Happy DOM.
 		const script = document.getElementById("pd-checkout-script");
 		expect(script).toBeTruthy();
+		expect((script as HTMLScriptElement)?.src).toBe(
+			"https://www.purpledotprice.com/api/v1/checkout.js",
+		);
 
 		// Manually dispatch the load event
 		script?.dispatchEvent(new Event("load"));

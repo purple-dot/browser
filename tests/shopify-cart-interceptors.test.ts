@@ -8,7 +8,7 @@ const _jsonHeader = { "Content-Type": "application/json" };
 const _formHeader = { "Content-Type": "application/x-www-form-urlencoded" };
 
 describe("ShopifyAddToCartInterceptor", () => {
-	// rome-ignore lint/suspicious/noExplicitAny: tests
+	// biome-ignore lint/suspicious/noExplicitAny: tests
 	let fetchSpy: any;
 
 	beforeEach(() => {

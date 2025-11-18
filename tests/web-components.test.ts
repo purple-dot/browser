@@ -10,7 +10,6 @@ import {
 
 describe("onceCheckoutScriptLoaded", () => {
 	beforeEach(() => {
-		// Configure Happy DOM to enable JavaScript evaluation and file loading
 		// biome-ignore lint/suspicious/noExplicitAny: Happy DOM types are not fully exposed
 		const windowWithHappyDOM = window as any;
 		if (windowWithHappyDOM.happyDOM?.settings) {

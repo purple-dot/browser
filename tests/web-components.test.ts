@@ -15,9 +15,18 @@ describe("onceCheckoutScriptLoaded", () => {
 
 		injectComponentScripts();
 
-		return waitFor(() => {
-			expect(callback).toHaveBeenCalled();
-		});
+		// Find the script element and manually trigger the load event
+		// We do this because we have not enabled JavaScript evaluation in Happy DOM.
+		const script = document.getElementById("pd-checkout-script");
+		expect(script).toBeTruthy();
+		expect((script as HTMLScriptElement)?.src).toBe(
+			"https://www.purpledotprice.com/api/v1/checkout.js",
+		);
+
+		// Manually dispatch the load event
+		script?.dispatchEvent(new Event("load"));
+
+		expect(callback).toHaveBeenCalled();
 	});
 
 	test("fires the callback immediately if the script is already loaded", async () => {

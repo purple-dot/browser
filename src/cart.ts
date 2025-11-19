@@ -29,6 +29,7 @@ export interface Cart<T extends CartItem> {
 
 	// Mutations
 	decrementQuantity: (id: string, cartId?: string | null) => Promise<void>;
+	decrementBulkQuantity: (ids: string[], cartId?: string | null) => Promise<void>;
 	clear: (cartId?: string | null) => Promise<void>;
 	navigateToCheckout: (cartId?: string | null) => Promise<void>;
 }

@@ -135,6 +135,66 @@ export class ShopifyStorefrontCart implements Cart<ShopifyStorefrontCartItem> {
 		});
 	}
 
+	async decrementBulkQuantity(
+		variantIdsOrCartLineItemIds: string[],
+		cartId?: string | null,
+	) {
+		if (!cartId) {
+			throw new Error("cartId must be provided to ShopifyStorefrontCart");
+		}
+
+		const items = await this.fetchItems(cartId);
+		const linesToUpdate: { id: string; quantity: number }[] = [];
+
+		for (const variantIdOrCartLineItemId of variantIdsOrCartLineItemIds) {
+			const line = items.find((item) => {
+				if (idFromGid(item.merchandise.id) === variantIdOrCartLineItemId) {
+					return true;
+				}
+				return item.id === variantIdOrCartLineItemId;
+			});
+
+			if (!line) {
+				console.warn(
+					`Could not find line item with id ${variantIdOrCartLineItemId} in cart ${cartId}`,
+				);
+				continue;
+			}
+
+			linesToUpdate.push({
+				id: line.id,
+				quantity: line.quantity - 1,
+			});
+		}
+
+		if (linesToUpdate.length > 0) {
+			await this.graphql({
+				query: `
+        mutation cartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
+          cartLinesUpdate(
+          cartId: $cartId,
+          lines: $lines
+        ) {
+          cart {
+            id
+            lines(first: 99) {
+              edges {
+                node {
+                  id
+                }
+              }
+            }
+          }
+        }
+      }`,
+				variables: {
+					cartId,
+					lines: linesToUpdate,
+				},
+			});
+		}
+	}
+
 	async clear(cartId?: string | null) {
 		if (!cartId) {
 			throw new Error("cartId must be provided to ShopifyStorefrontCart");

@@ -79,6 +79,35 @@ export class ShopifyAJAXCart implements Cart<ShopifyAJAXCartItem> {
 		}
 	}
 
+	async decrementBulkQuantity(ids: string[]) {
+		const cartResponse = await fetch("/cart.js");
+		const cart = await cartResponse.json();
+
+		const updates: Record<string, number> = {};
+
+		for (const id of ids) {
+			const lineItem = cart.items.find(
+				(item: { id: number }) => item.id.toString() === id,
+			);
+
+			if (lineItem) {
+				updates[lineItem.id] = lineItem.quantity - 1;
+			}
+		}
+
+		if (Object.keys(updates).length > 0) {
+			await fetch("/cart/update.js", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					updates,
+				}),
+			});
+		}
+	}
+
 	async clear() {
 		await fetch("/cart/clear.js", { method: "POST" });
 	}

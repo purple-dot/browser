@@ -1,4 +1,4 @@
-import type { Cart, CartItem, PreorderAttributes } from "./cart";
+import type { Cart, CartItem, PreorderAttributes, QuantityUpdate } from "./cart";
 import { idFromGid } from "./gid";
 
 export interface ShopifyStorefrontCartItem extends CartItem {
@@ -135,8 +135,8 @@ export class ShopifyStorefrontCart implements Cart<ShopifyStorefrontCartItem> {
 		});
 	}
 
-	async decrementBulkQuantity(
-		variantIdsOrCartLineItemIds: string[],
+	async updateQuantities(
+		updates: QuantityUpdate[],
 		cartId?: string | null,
 	) {
 		if (!cartId) {
@@ -146,24 +146,24 @@ export class ShopifyStorefrontCart implements Cart<ShopifyStorefrontCartItem> {
 		const items = await this.fetchItems(cartId);
 		const linesToUpdate: { id: string; quantity: number }[] = [];
 
-		for (const variantIdOrCartLineItemId of variantIdsOrCartLineItemIds) {
+		for (const update of updates) {
 			const line = items.find((item) => {
-				if (idFromGid(item.merchandise.id) === variantIdOrCartLineItemId) {
+				if (idFromGid(item.merchandise?.id ?? "") === update.id) {
 					return true;
 				}
-				return item.id === variantIdOrCartLineItemId;
+				return item.id === update.id;
 			});
 
 			if (!line) {
 				console.warn(
-					`Could not find line item with id ${variantIdOrCartLineItemId} in cart ${cartId}`,
+					`Could not find line item with id ${update.id} in cart ${cartId}`,
 				);
 				continue;
 			}
 
 			linesToUpdate.push({
 				id: line.id,
-				quantity: line.quantity - 1,
+				quantity: update.quantity,
 			});
 		}
 

@@ -1,6 +1,6 @@
 import cookies from "js-cookie";
 import { fetchVariantsPreorderState } from "./api";
-import type { Cart, CartItem, PreorderAttributes } from "./cart";
+import type { Cart, CartItem, PreorderAttributes, QuantityUpdate } from "./cart";
 import type { JSONObject } from "./interceptors";
 
 export interface ShopifyAJAXCartItem extends CartItem {
@@ -79,30 +79,35 @@ export class ShopifyAJAXCart implements Cart<ShopifyAJAXCartItem> {
 		}
 	}
 
-	async decrementBulkQuantity(ids: string[]) {
+	async updateQuantities(
+		updates: QuantityUpdate[],
+		cartId?: string | null,
+	) {
 		const cartResponse = await fetch("/cart.js");
 		const cart = await cartResponse.json();
 
-		const updates: Record<string, number> = {};
+		const updateMap: Record<string, number> = {};
 
-		for (const id of ids) {
+		for (const update of updates) {
 			const lineItem = cart.items.find(
-				(item: { id: number }) => item.id.toString() === id,
+				(item: { id: number; key?: string }) =>
+					item.id.toString() === update.id ||
+					item.key === update.id,
 			);
 
 			if (lineItem) {
-				updates[lineItem.id] = lineItem.quantity - 1;
+				updateMap[lineItem.id] = update.quantity;
 			}
 		}
 
-		if (Object.keys(updates).length > 0) {
+		if (Object.keys(updateMap).length > 0) {
 			await fetch("/cart/update.js", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
-					updates,
+					updates: updateMap,
 				}),
 			});
 		}

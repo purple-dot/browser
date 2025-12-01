@@ -1,6 +1,11 @@
 import cookies from "js-cookie";
 import { fetchVariantsPreorderState } from "./api";
-import type { Cart, CartItem, PreorderAttributes } from "./cart";
+import type {
+	Cart,
+	CartItem,
+	PreorderAttributes,
+	QuantityUpdate,
+} from "./cart";
 import type { JSONObject } from "./interceptors";
 
 export interface ShopifyAJAXCartItem extends CartItem {
@@ -74,6 +79,36 @@ export class ShopifyAJAXCart implements Cart<ShopifyAJAXCartItem> {
 				},
 				body: JSON.stringify({
 					updates,
+				}),
+			});
+		}
+	}
+
+	async updateQuantities(updates: QuantityUpdate[], _cartId?: string | null) {
+		const cartResponse = await fetch("/cart.js");
+		const cart = await cartResponse.json();
+
+		const updateMap: Record<string, number> = {};
+
+		for (const update of updates) {
+			const lineItem = cart.items.find(
+				(item: { id: number; key?: string }) =>
+					item.id.toString() === update.id || item.key === update.id,
+			);
+
+			if (lineItem) {
+				updateMap[lineItem.id] = update.quantity;
+			}
+		}
+
+		if (Object.keys(updateMap).length > 0) {
+			await fetch("/cart/update.js", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					updates: updateMap,
 				}),
 			});
 		}

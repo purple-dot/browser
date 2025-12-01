@@ -17,6 +17,11 @@ export interface CartItem {
 	attributes: { key: string; value: string }[];
 }
 
+export type QuantityUpdate = {
+	id: string;
+	quantity: number;
+};
+
 export interface Cart<T extends CartItem> {
 	hasPreorderAttributes: (item: T) => boolean;
 	addPreorderAttributes: (item: T, attrs: PreorderAttributes) => T;
@@ -29,6 +34,10 @@ export interface Cart<T extends CartItem> {
 
 	// Mutations
 	decrementQuantity: (id: string, cartId?: string | null) => Promise<void>;
+	updateQuantities: (
+		updates: QuantityUpdate[],
+		cartId?: string | null,
+	) => Promise<void>;
 	clear: (cartId?: string | null) => Promise<void>;
 	navigateToCheckout: (cartId?: string | null) => Promise<void>;
 }

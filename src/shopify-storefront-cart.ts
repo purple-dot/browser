@@ -1,4 +1,9 @@
-import type { Cart, CartItem, PreorderAttributes, QuantityUpdate } from "./cart";
+import type {
+	Cart,
+	CartItem,
+	PreorderAttributes,
+	QuantityUpdate,
+} from "./cart";
 import { idFromGid } from "./gid";
 
 export interface ShopifyStorefrontCartItem extends CartItem {
@@ -135,10 +140,7 @@ export class ShopifyStorefrontCart implements Cart<ShopifyStorefrontCartItem> {
 		});
 	}
 
-	async updateQuantities(
-		updates: QuantityUpdate[],
-		cartId?: string | null,
-	) {
+	async updateQuantities(updates: QuantityUpdate[], cartId?: string | null) {
 		if (!cartId) {
 			throw new Error("cartId must be provided to ShopifyStorefrontCart");
 		}

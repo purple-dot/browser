@@ -2,7 +2,7 @@
 
 import { waitFor } from "@testing-library/dom";
 import { describe, expect, test, vi } from "vitest";
-
+import { PD_HOST_URL } from "../src/api";
 import {
 	injectComponentScripts,
 	onceCheckoutScriptLoaded,
@@ -20,7 +20,7 @@ describe("onceCheckoutScriptLoaded", () => {
 		const script = document.getElementById("pd-checkout-script");
 		expect(script).toBeTruthy();
 		expect((script as HTMLScriptElement)?.src).toBe(
-			"https://www.purpledotprice.com/api/v1/checkout.js",
+			`${PD_HOST_URL}/api/v1/checkout.js`,
 		);
 
 		// Manually dispatch the load event

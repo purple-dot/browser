@@ -2,6 +2,8 @@ import { getConfig } from "./config";
 import type { FlagConfig } from "./feature-flags";
 import { trackEvent } from "./tracking";
 
+export const PD_HOST_URL = "https://www.purpledotprice.com";
+
 export interface ProductPreorderState {
 	state: NewEndpointPreorderState;
 	waitlist: {
@@ -20,9 +22,7 @@ export interface ProductPreorderState {
 export async function fetchProductsPreorderState(
 	handle: string,
 ): Promise<ProductPreorderState | null> {
-	const url = new URL(
-		"https://www.purpledotprice.com/api/v1/products/preorder-state",
-	);
+	const url = new URL(`${PD_HOST_URL}/api/v1/products/preorder-state`);
 
 	identifyShop(url);
 
@@ -73,9 +73,7 @@ export interface VariantPreorderState {
 export async function fetchVariantsPreorderState(
 	variantId: string | number,
 ): Promise<VariantPreorderState | null> {
-	const url = new URL(
-		"https://www.purpledotprice.com/api/v1/variants/preorder-state",
-	);
+	const url = new URL(`${PD_HOST_URL}/api/v1/variants/preorder-state`);
 
 	identifyShop(url);
 
@@ -103,9 +101,7 @@ interface IntegrationSettings {
 }
 
 export async function fetchIntegrationSettings(): Promise<IntegrationSettings | null> {
-	const url = new URL(
-		"https://www.purpledotprice.com/api/v1/integration-settings",
-	);
+	const url = new URL(`${PD_HOST_URL}/api/v1/integration-settings`);
 
 	identifyShop(url);
 	const resp = await fetch(url.toString());

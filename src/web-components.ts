@@ -1,5 +1,4 @@
 import { PD_HOST_URL } from "./api";
-import { getConfig } from "./config";
 
 export function injectComponentScripts() {
 	const webComponents = [
@@ -7,7 +6,6 @@ export function injectComponentScripts() {
 		"checkout",
 		"self-service",
 		"separate-bag",
-		"express-payment-confirmation",
 	];
 
 	webComponents.forEach((component) => {
@@ -18,8 +16,6 @@ export function injectComponentScripts() {
 			}),
 		);
 	});
-
-	initExpressPaymentConfirmation();
 }
 
 type Callback = () => void;
@@ -67,31 +63,4 @@ function makeScriptTag({ id, src }: { id: string; src: string }) {
 	script.async = true;
 	script.defer = true;
 	return script;
-}
-
-function initExpressPaymentConfirmation() {
-	onceScriptLoaded("pd-express-payment-confirmation-script", () => {
-		const apiKey = getConfig()?.apiKey;
-
-		if (apiKey) {
-			window.postMessage(
-				{
-					type: "PD_INIT_EXPRESS_PAYMENT_CONFIRMATION",
-					hostURL: PD_HOST_URL,
-					apiKey,
-				},
-				window.location.origin,
-			);
-
-			window.addEventListener("message", (event) => {
-				if (event.origin !== new URL(PD_HOST_URL).origin) {
-					return;
-				}
-
-				if (event.data?.type === "GO_TO_HOME_PAGE") {
-					window.location.href = "/";
-				}
-			});
-		}
-	});
 }

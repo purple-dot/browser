@@ -8,7 +8,7 @@ import { getConfig } from "./config";
 type AvailabilityRequest<J> = J extends
 	| { variantId: string }
 	| { productHandle: string }
-	? J
+	? J & { country?: string }
 	: never;
 
 /**
@@ -36,8 +36,8 @@ export async function availability<I, J>(
 		if (!preorderStatePromise) {
 			const fetchPromise =
 				"variantId" in request
-					? fetchVariantsPreorderState(request.variantId)
-					: fetchProductsPreorderState(request.productHandle);
+					? fetchVariantsPreorderState(request.variantId, request.country)
+					: fetchProductsPreorderState(request.productHandle, request.country);
 
 			preorderStatePromise = fetchPromise.then((state) =>
 				mapPreorderStateToAvailability(state),

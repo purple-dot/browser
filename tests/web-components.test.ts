@@ -2,7 +2,7 @@
 
 import { waitFor } from "@testing-library/dom";
 import { describe, expect, test, vi } from "vitest";
-
+import { PD_HOST_URL } from "../src/api";
 import {
 	injectComponentScripts,
 	onceCheckoutScriptLoaded,
@@ -15,9 +15,18 @@ describe("onceCheckoutScriptLoaded", () => {
 
 		injectComponentScripts();
 
-		return waitFor(() => {
-			expect(callback).toHaveBeenCalled();
-		});
+		// Find the script element and manually trigger the load event
+		// We do this because we have not enabled JavaScript evaluation in Happy DOM.
+		const script = document.getElementById("pd-checkout-script");
+		expect(script).toBeTruthy();
+		expect((script as HTMLScriptElement)?.src).toBe(
+			`${PD_HOST_URL}/api/v1/checkout.js`,
+		);
+
+		// Manually dispatch the load event
+		script?.dispatchEvent(new Event("load"));
+
+		expect(callback).toHaveBeenCalled();
 	});
 
 	test("fires the callback immediately if the script is already loaded", async () => {

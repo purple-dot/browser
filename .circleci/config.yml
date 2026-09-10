@@ -1,12 +1,12 @@
 version: 2.1
 orbs:
-  docker: circleci/docker@2.1.1
+  docker: circleci/docker@2.6.0
   node: circleci/node@7.1.0
 
 executors:
   node:
-    docker: &node_image
-      - image: cypress/browsers:node18.12.0-chrome107
+    docker:
+      - image: cimg/node:22.11-browsers
         environment:
           TERM: xterm
           CYPRESS_CACHE_FOLDER: ~/repo/.cypress
@@ -47,18 +47,6 @@ jobs:
       - node/install:
           install-pnpm: true
       - run: pnpm run test
-      - run:
-          command: pnpm run start:test-http-server
-          background: true
-      - run: pnpm run build:test
-      - store_test_results:
-          path: /root/repo/cypress/results
-      - store_artifacts:
-          path: /root/repo/cypress/videos
-          destination: cypress-videos
-      - store_artifacts:
-          path: /root/repo/cypress/screenshots
-          destination: cypress-screenshots
 
   publish:
     executor: node
@@ -90,4 +78,4 @@ workflows:
             - test
           filters:
             branches:
-              only: main
+              only: master

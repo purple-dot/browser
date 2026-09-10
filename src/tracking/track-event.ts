@@ -1,5 +1,6 @@
 import cookies from "js-cookie";
 import { v4 as uuid } from "uuid";
+import { PD_HOST_URL } from "../api";
 import getDeviceId from "./device-id";
 import * as SessionStorage from "./session-storage";
 
@@ -25,7 +26,7 @@ export async function trackEvent(
 		url: window.location.href,
 		referrer: window.document.referrer,
 	};
-	const trackRequest = fetch("https://www.purpledotprice.com/api/v1/track", {
+	const trackRequest = fetch(`${PD_HOST_URL}/api/v1/track`, {
 		method: "POST",
 		body: JSON.stringify(event),
 		mode: "cors",

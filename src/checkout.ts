@@ -1,6 +1,7 @@
 import { v4 } from "uuid";
 import { fetchIntegrationSettings, fetchVariantsPreorderState } from "./api";
 import { type CartItem, getCartAdapter } from "./cart";
+import { getConfig } from "./config";
 import { FeatureFlags } from "./feature-flags";
 import { idFromGid } from "./gid";
 import { onceCheckoutScriptLoaded } from "./web-components";
@@ -18,8 +19,9 @@ export type PurpleDotAddItemResponse =
 			};
 	  };
 
-export interface PurpleDotCheckoutElement extends Element {
-	open: (args: { cartId: string; cartType: string }) => void;
+export interface PurpleDotCheckoutElement extends HTMLElement {
+	open: (args: { cartId: string | null; cartType: string }) => void;
+	close: () => void;
 	expressCheckout: (args: {
 		variantId: string;
 		releaseId: string;
@@ -35,14 +37,21 @@ export interface PurpleDotCheckoutElement extends Element {
 		templatePaymentPlanId?: string;
 	}) => Promise<PurpleDotAddItemResponse>;
 	show: () => void;
+	locale?: string;
 }
 
+const CHECKOUT_ELEMENT = "purple-dot-checkout";
+
 export async function open(args?: { cartId?: string; sessionId?: string }) {
-	if (document.querySelector("purple-dot-checkout")) {
+	if (document.querySelector(CHECKOUT_ELEMENT)) {
 		return;
 	}
 
-	const element = document.createElement("purple-dot-checkout");
+	const element = document.createElement(CHECKOUT_ELEMENT);
+	const config = getConfig();
+	if (config?.locale) {
+		element.locale = config.locale;
+	}
 	document.body.appendChild(element);
 
 	const cartAdapter = getCartAdapter();
@@ -57,7 +66,6 @@ export async function open(args?: { cartId?: string; sessionId?: string }) {
 	return new Promise<void>((resolve) => {
 		onceCheckoutScriptLoaded(async () => {
 			if (requiresSeparateCheckout) {
-				// @ts-ignore
 				element.open({ cartId, cartType });
 			} else {
 				await cartAdapter.navigateToCheckout(cartId);
@@ -79,7 +87,6 @@ export async function openExpressCheckout(args: {
 
 	return new Promise<void>((resolve) => {
 		onceCheckoutScriptLoaded(async () => {
-			// @ts-ignore
 			element.expressCheckout(args);
 			resolve();
 		});
@@ -100,14 +107,17 @@ export async function purpleDotCheckout<T>(
 }
 
 function getOrCreateCheckoutElement() {
-	let element = document.querySelector("purple-dot-checkout");
+	let element = document.querySelector(CHECKOUT_ELEMENT);
 
 	if (!element) {
-		element = document.createElement("purple-dot-checkout");
+		element = document.createElement(CHECKOUT_ELEMENT);
+		const config = getConfig();
+		if (config?.locale) {
+			element.locale = config.locale;
+		}
 		document.body.appendChild(element);
 	}
-
-	return element as PurpleDotCheckoutElement;
+	return element;
 }
 
 let sessionIdFallback: string;

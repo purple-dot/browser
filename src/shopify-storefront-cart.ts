@@ -1,4 +1,9 @@
-import type { Cart, CartItem, PreorderAttributes } from "./cart";
+import type {
+	Cart,
+	CartItem,
+	PreorderAttributes,
+	QuantityUpdate,
+} from "./cart";
 import { idFromGid } from "./gid";
 
 export interface ShopifyStorefrontCartItem extends CartItem {
@@ -133,6 +138,63 @@ export class ShopifyStorefrontCart implements Cart<ShopifyStorefrontCartItem> {
 				},
 			},
 		});
+	}
+
+	async updateQuantities(updates: QuantityUpdate[], cartId?: string | null) {
+		if (!cartId) {
+			throw new Error("cartId must be provided to ShopifyStorefrontCart");
+		}
+
+		const items = await this.fetchItems(cartId);
+		const linesToUpdate: { id: string; quantity: number }[] = [];
+
+		for (const update of updates) {
+			const line = items.find((item) => {
+				if (idFromGid(item.merchandise?.id ?? "") === update.id) {
+					return true;
+				}
+				return item.id === update.id;
+			});
+
+			if (!line) {
+				console.warn(
+					`Could not find line item with id ${update.id} in cart ${cartId}`,
+				);
+				continue;
+			}
+
+			linesToUpdate.push({
+				id: line.id,
+				quantity: update.quantity,
+			});
+		}
+
+		if (linesToUpdate.length > 0) {
+			await this.graphql({
+				query: `
+        mutation cartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
+          cartLinesUpdate(
+          cartId: $cartId,
+          lines: $lines
+        ) {
+          cart {
+            id
+            lines(first: 99) {
+              edges {
+                node {
+                  id
+                }
+              }
+            }
+          }
+        }
+      }`,
+				variables: {
+					cartId,
+					lines: linesToUpdate,
+				},
+			});
+		}
 	}
 
 	async clear(cartId?: string | null) {

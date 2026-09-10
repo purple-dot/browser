@@ -1,3 +1,5 @@
+import { PD_HOST_URL } from "./api";
+
 export function injectComponentScripts() {
 	const webComponents = [
 		"learn-more",
@@ -10,7 +12,7 @@ export function injectComponentScripts() {
 		injectScriptOnce(
 			makeScriptTag({
 				id: `pd-${component}-script`,
-				src: `https://www.purpledotprice.com/api/v1/${component}.js`,
+				src: `${PD_HOST_URL}/api/v1/${component}.js`,
 			}),
 		);
 	});

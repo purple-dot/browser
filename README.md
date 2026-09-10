@@ -24,6 +24,8 @@ init({
 
 This allows you to tell the current availability state for an item so you can tell if the item is in stock, sold out or on preorder.
 
+Pass an optional `country` (ISO country code) so the preorder state is evaluated for the shopper's country.
+
 ```javascript
 import { availability } from '@purple-dot/browser/availability';
 
@@ -34,7 +36,10 @@ async function inStockInMyStore(variantId) {
     return data.quantity;
 }
 
-const preorderState = await availability(variant.id, inStockInMyStore);
+const preorderState = await availability(
+  { variantId: variant.id, country: 'GB' },
+  inStockInMyStore,
+);
 ```
 
 ### Checkout
@@ -74,10 +79,14 @@ interceptors.start();
 
 ### Low level API
 
+`fetchVariantsPreorderState` and `fetchProductsPreorderState` accept an optional country as a second argument, sent as `?country=` on the request.
+
 ```javascript
 import * as api from '@purple-dot/browser/api';
 
-const variantState =  await api.fetchVariantsPreorderState(12345);
+const variantState = await api.fetchVariantsPreorderState(12345);
+const variantStateForCountry = await api.fetchVariantsPreorderState(12345, 'GB');
 
 const productState = await api.fetchProductsPreorderState('test-product');
+const productStateForCountry = await api.fetchProductsPreorderState('test-product', 'US');
 ```

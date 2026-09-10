@@ -21,12 +21,16 @@ export interface ProductPreorderState {
 
 export async function fetchProductsPreorderState(
 	handle: string,
+	country?: string,
 ): Promise<ProductPreorderState | null> {
 	const url = new URL(`${PD_HOST_URL}/api/v1/products/preorder-state`);
 
 	identifyShop(url);
 
 	url.searchParams.set("handle", handle);
+	if (country) {
+		url.searchParams.set("country", country);
+	}
 	const resp = await fetch(url.toString());
 
 	if (resp.ok) {
@@ -72,12 +76,16 @@ export interface VariantPreorderState {
 
 export async function fetchVariantsPreorderState(
 	variantId: string | number,
+	country?: string,
 ): Promise<VariantPreorderState | null> {
 	const url = new URL(`${PD_HOST_URL}/api/v1/variants/preorder-state`);
 
 	identifyShop(url);
 
 	url.searchParams.set("variant_id", variantId.toString());
+	if (country) {
+		url.searchParams.set("country", country);
+	}
 	const resp = await fetch(url.toString());
 
 	if (resp.ok) {

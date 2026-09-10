@@ -106,4 +106,38 @@ describe("availability", () => {
 			});
 		});
 	});
+
+	describe("when a country is provided", () => {
+		beforeEach(() => {
+			fetchMocker.resetMocks();
+			fetchMocker.mockResponse(
+				JSON.stringify({
+					data: {
+						state: "SOLD_OUT",
+					},
+				}),
+			);
+		});
+
+		it("passes country through to the variant preorder state API", async () => {
+			await availability({ variantId: "123", country: "GB" }, () =>
+				Promise.resolve(false),
+			);
+
+			expect(fetchMocker).toHaveBeenCalledWith(
+				"https://www.purpledotprice.com/api/v1/variants/preorder-state?api_key=123&variant_id=123&country=GB",
+			);
+		});
+
+		it("passes country through to the product preorder state API", async () => {
+			await availability(
+				{ productHandle: "the-complete-snowboard", country: "US" },
+				() => Promise.resolve(false),
+			);
+
+			expect(fetchMocker).toHaveBeenCalledWith(
+				"https://www.purpledotprice.com/api/v1/products/preorder-state?api_key=123&handle=the-complete-snowboard&country=US",
+			);
+		});
+	});
 });

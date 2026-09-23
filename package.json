@@ -41,7 +41,6 @@
     "@testing-library/dom": "^9.3.1",
     "@tsconfig/recommended": "^1.0.2",
     "@types/js-cookie": "^3.0.3",
-    "@types/uuid": "^9.0.2",
     "@vitest/coverage-v8": "^4.0.10",
     "happy-dom": "^20.0.0",
     "http-server": "^14.1.1",
@@ -54,8 +53,7 @@
   "packageManager": "pnpm@10.12.4",
   "dependencies": {
     "js-cookie": "^3.0.5",
-    "murmurhash": "^2.0.1",
-    "uuid": "^9.0.0"
+    "murmurhash": "^2.0.1"
   },
   "publishConfig": {
     "access": "public"

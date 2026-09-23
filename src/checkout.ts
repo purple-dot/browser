@@ -1,4 +1,3 @@
-import { v4 } from "uuid";
 import { fetchIntegrationSettings, fetchVariantsPreorderState } from "./api";
 import { type CartItem, getCartAdapter } from "./cart";
 import { getConfig } from "./config";
@@ -136,7 +135,7 @@ async function cartRequiresSeparateCheckout(
 	}
 
 	if (!sessionIdFallback) {
-		sessionIdFallback = v4();
+		sessionIdFallback = crypto.randomUUID();
 	}
 
 	const integrationSettings = await fetchIntegrationSettings();

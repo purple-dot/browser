@@ -1,5 +1,4 @@
 import cookies from "js-cookie";
-import { v4 as uuid } from "uuid";
 import * as SessionStorage from "./session-storage";
 
 const COOKIE_NAME = "_pddid";
@@ -25,7 +24,7 @@ function getDeviceIdCookie() {
 		return deviceId;
 	}
 
-	deviceId = uuid();
+	deviceId = crypto.randomUUID();
 	cookies.set(COOKIE_NAME, deviceId, {
 		expires: 365,
 		secure: true,
@@ -45,7 +44,7 @@ function getDeviceIdSessionStorage() {
 	if (deviceId) {
 		return deviceId;
 	}
-	deviceId = uuid();
+	deviceId = crypto.randomUUID();
 	SessionStorage.setItem(COOKIE_NAME, deviceId);
 
 	// Read value back to check if it was successfully persisted
@@ -56,7 +55,7 @@ let deviceIdMem: string;
 
 function getDeviceIdMemory() {
 	if (!deviceIdMem) {
-		deviceIdMem = uuid();
+		deviceIdMem = crypto.randomUUID();
 	}
 
 	return deviceIdMem;

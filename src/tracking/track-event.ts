@@ -1,5 +1,4 @@
 import cookies from "js-cookie";
-import { v4 as uuid } from "uuid";
 import { PD_HOST_URL } from "../api";
 import getDeviceId from "./device-id";
 import * as SessionStorage from "./session-storage";
@@ -12,7 +11,7 @@ export async function trackEvent(
 	const { deviceId, storage } = getDeviceId();
 	const cartToken = cookies.get("cart") ?? null;
 	const event = {
-		id: uuid(),
+		id: crypto.randomUUID(),
 		name,
 		attrs: {
 			deviceIdPersistent: storage === "cookie",

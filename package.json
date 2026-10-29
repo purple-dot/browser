@@ -42,7 +42,7 @@
     "@tsconfig/recommended": "^1.0.2",
     "@types/js-cookie": "^3.0.3",
     "@vitest/coverage-v8": "^4.0.10",
-    "happy-dom": "^20.0.0",
+    "happy-dom": "^21.0.4",
     "http-server": "^14.1.1",
     "jsdom": "22.1.0",
     "typescript": "^5.1.6",

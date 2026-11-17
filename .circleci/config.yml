@@ -6,7 +6,7 @@ orbs:
 executors:
   node:
     docker:
-      - image: cimg/node:22.11-browsers
+      - image: cimg/node:24.22-browsers
         environment:
           TERM: xterm
           CYPRESS_CACHE_FOLDER: ~/repo/.cypress

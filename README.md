@@ -4,7 +4,7 @@ This package is a toolbox for connecting your headless e-commerce application to
 
 While the examples often refer to Shopify it is designed to support a wide range of stores.
 
-Please see [related documentation](http://bit.ly/47JtIk0) to learn more.
+Please see [related documentation](https://docs.getpurpledot.com/e-commerce-platforms/shopify/integrate-with-a-headless-storefront) to learn more.
 
 You can find examples based on this code in [purple-dot/browser-examples](https://github.com/purple-dot/browser-examples).
 

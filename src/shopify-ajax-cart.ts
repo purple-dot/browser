@@ -14,6 +14,18 @@ export interface ShopifyAJAXCartItem extends CartItem {
 	properties?: Record<string, string>;
 }
 
+interface ShopifyCartLine {
+	id: number;
+	key?: string;
+	quantity: number;
+}
+
+// --- Cart line lookup ---
+function findCartLine(items: ShopifyCartLine[], id: string) {
+	return items.find((item) => item.key === id || item.id.toString() === id);
+}
+// --- End cart line lookup ---
+
 export class ShopifyAJAXCart implements Cart<ShopifyAJAXCartItem> {
 	hasPreorderAttributes(item: ShopifyAJAXCartItem): boolean {
 		return !!item.properties?.__releaseId;
@@ -63,13 +75,11 @@ export class ShopifyAJAXCart implements Cart<ShopifyAJAXCartItem> {
 		const cartResponse = await fetch("/cart.js");
 		const cart = await cartResponse.json();
 
-		const lineItem = cart.items.find(
-			(item: { id: number }) => item.id.toString() === id,
-		);
+		const lineItem = findCartLine(cart.items, id);
 
 		if (lineItem) {
 			const updates = {
-				[lineItem.id]: lineItem.quantity - 1,
+				[lineItem.key ?? lineItem.id]: lineItem.quantity - 1,
 			};
 
 			await fetch("/cart/update.js", {
@@ -91,13 +101,11 @@ export class ShopifyAJAXCart implements Cart<ShopifyAJAXCartItem> {
 		const updateMap: Record<string, number> = {};
 
 		for (const update of updates) {
-			const lineItem = cart.items.find(
-				(item: { id: number; key?: string }) =>
-					item.id.toString() === update.id || item.key === update.id,
-			);
+			const lineItem = findCartLine(cart.items, update.id);
 
 			if (lineItem) {
-				updateMap[lineItem.id] = update.quantity;
+				// Different cart lines can carry the same variant ID.
+				updateMap[lineItem.key ?? lineItem.id] = update.quantity;
 			}
 		}
 
